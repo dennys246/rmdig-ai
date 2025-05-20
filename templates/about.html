@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}About | RMD {% endblock %}
+
+{% block content %}
+
+        
+<div class="py-16 px-4 md:px-8 max-w-6xl mx-auto dark:bg-gray-900 dark:text-gray-100">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <!-- Profile image -->
+      <div class="flex justify-center">
+        <img src="{{ url_for('static', filename='img/denny.jpeg') }}" alt="Denny Schaedig" class="rounded-2xl w-64 h-64 object-cover shadow-lg border-4 border-indigo-500 dark:border-indigo-400">
+      </div>
+  
+      <!-- Bio -->
+      <div>
+        <h2 class="text-4xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">About Denny Schaedig</h2>
+        <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          Denny Schaedig is the founder of RMD — a Neuroscientist and AI Engineer building tools at the intersection of brain science and machine learning.
+          He holds a Bachelor's in Neuroscience from the University of Colorado Boulder and a Master’s in AI/ML from CSU Global.
+        </p>
+        <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+          His collaborations with WashU and CU Boulder focus on the computational modeling of fMRI and fNIRS data, which led to the development of
+          <span class="font-semibold text-indigo-600 dark:text-indigo-400">HRFunc</span> and <span class="font-semibold text-indigo-600 dark:text-indigo-400">BOLDnet</span> — open-source Python tools for neuroimaging preprocessing and analysis.
+        </p>
+        <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+          Contact Denny at <a href="mailto:dennys@rmdig.ai" class="text-indigo-600 dark:text-indigo-400 underline">dennys@rmdig.ai</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

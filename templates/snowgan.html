@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}About | RMD {% endblock %}
+
+{% block content %}
+
+        
+<div class="py-16 px-4 md:px-8 max-w-6xl mx-auto dark:bg-gray-900 dark:text-gray-100">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <!-- Profile image -->
+      <div class="prose dark:prose-invert max-w-4xl mx-auto">
+        <video controls class="rounded-2xl w-full shadow-lg border-4 border-indigo-500 dark:border-indigo-400">
+        <source src="{{ url_for('static', filename='videos/short_snowgan_history.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+        <p class="mt-2 text-center text-indigo-200 dark:text-indigo-200 italic">
+            History of synthetic pictures produced by the snowGAN throughout it's training on snowpack data
+        </p>
+        </div> 
+        <div>
+            <h2 class="text-4xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">The Abominable SnowGAN</h2>
+            <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                The <strong class="dark:text-indigo-400">snowGAN</strong> was an explorator model built to simply learn about <strong class="dark:text-indigo-400"><a href="/datasets" class="hover:text-indigo-600">snowpack data</a></strong>. Initially 
+                the AI was trained to simply understand features of the data, with the intention of transfering what it learned to a new task that could assist in assessing, if not predicting itself, avalanche risk.
+                Explore applying AI to snowpack data and learning about avalanches with us by training your own AI with the dataset, or leveraging the snowGAN as a pre-trained model! 
+            </p>
+        </div>
+    </div>
+  </div>
+
+{% endblock %}

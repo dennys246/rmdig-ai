@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+  <meta charset="UTF-8">
+  <title class="text-white hover:text-indigo-400">{% block title %}Rocky Mountain Digerati{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,600,700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-800 dark:bg-gray-900">
+  <header class="p-4 bg-indigo-600 text-white shadow">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold hover:text-indigo-400"><a href="/">RMD</a></h1>
+      <nav class="space-x-4">
+        <a href="/mission" class="text-white hover:text-indigo-400">Mission</a>
+        <a href="/tools" class="text-white hover:text-indigo-400">Tools</a>
+        <a href="/datasets" class="text-white hover:text-indigo-400">Datasets</a>
+        <a href="/about" class="text-white hover:text-indigo-400">About</a>
+        <a href="/contact" class="text-white hover:text-indigo-400">Contact Us</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto p-6 mt-6 bg-blue rounded-2xl shadow-md">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
