@@ -1,6 +1,7 @@
 services:
   - type: web
-    name: rmdig-ai
+    name: rmdig-flask
     runtime: python
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
