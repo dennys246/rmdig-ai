@@ -1,9 +1,102 @@
 {% extends "base.html" %}
 {% block title %}HRF Upload | RMD{% endblock %}
 {% block content %}
-  <h2>Upload Your Data</h2>
-  <form action="/upload" method="POST" enctype="multipart/form-data">
-    <input type="file" name="datafile" required>
-    <button type="submit">Upload</button>
+  <form action="{{ url_for('upload_json') }}" method="POST" enctype="multipart/form-data" class="max-w-xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <h2 class="text-xl font-semibold mb-4 text-center text-gray-800 dark:text-gray-100">Collaborate with your HRF estimates</h2>
+    <p class="mb-4 text-center text-gray-800 dark:text-gray-100">
+    Share the HRF's you estimate with HRFunc with the wider fNIRS community by uploading it here. You must
+    have a peer reviewed paper with a DOI to attach to your submission for your HRF to be accepted.
+    <br><br>Please add as accurate experimental contexts related to your paradigm to allow for other researchers to search for your experimental paradigm.
+    </p>
+    <div class="mb-4">
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Your Name</label>
+        <input type="text" name="name" id="name" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">DOI</label>
+        <input type="text" name="name" id="name" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Study</label>
+        <input type="text" name="name" id="name" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <div class="relative my-8">
+        <div class="absolute inset-0 flex items-center" aria-hidden="true">
+          <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+        </div>
+        <div class="relative flex justify-center">
+          <span class="bg-white dark:bg-gray-800 px-3 text-sm text-gray-500 dark:text-gray-400">
+            Experimental Context
+          </span>
+        </div>
+      </div>
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Task</label>
+        <input type="text" name="name" id="name" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Conditions</label>
+        <input type="text" name="name" id="name" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Stimulus</label>
+        <input type="text" name="name" id="name" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Stimuli intensity</label>
+        <input type="text" name="name" id="name" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Protocol</label>
+        <input type="text" name="name" id="name" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Age Range - use format (-1, 6) </label>
+        <input type="text" name="name" id="name" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Demographics</label>
+        <input type="text" name="name" id="name" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <div class="relative my-8">
+        <div class="absolute inset-0 flex items-center" aria-hidden="true">
+          <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+        </div>
+        <div class="relative flex justify-center">
+          <span class="bg-white dark:bg-gray-800 px-3 text-sm text-gray-500 dark:text-gray-400">
+            Upload your HRF estimates
+          </span>
+        </div>
+      </div>
+      <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="jsonFile">
+          Select your HRF.json file:
+        </label>
+      </div>
+      <input type="file" name="jsonFile" id="jsonFile" accept=".json"
+             class="block w-full text-sm text-gray-800 dark:text-gray-100 file:mr-4 file:py-2 file:px-4
+                    file:rounded-full file:border-0 file:text-sm file:font-semibold
+                    file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100
+                    dark:file:bg-indigo-900 dark:file:text-indigo-300 dark:hover:file:bg-indigo-800"
+             required>
+    </div>
+    <br>
+      <div class="flex justify-center mt-6">
+      <button type="submit"
+              class="text-white px-4 py-2 rounded-md hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600">
+        Upload
+      </button>
+    </div>
   </form>
 {% endblock %}
