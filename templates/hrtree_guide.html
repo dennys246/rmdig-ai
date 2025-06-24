@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}About | RMD {% endblock %}
+
+{% block content %}
+
+<div class="py-16 px-4 md:px-8 max-w-6xl mx-auto dark:bg-gray-900 dark:text-gray-100">
+    <div>
+    <h2 class="text-4xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">Explore the HRtree</h2>
+        <br><br>
+        <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+            A core component of the HRfunc tool is the HRtree, a hybrid tree-hash table data
+            structure that efficiently stores HRF estimates with rich detail of their origins.
+            Leveraging this data structure users can filter the HRtree for experimental contexts
+            of interest like age range or experimental task. Here are the 10 primary contexts 
+            filterable within the HRtree...<br><br>
+
+            <h3 class="text-2xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400">Key HRF Contexts</h3>
+                <ul class="list-disc pl-6 space-y-2 text-gray-800 dark:text-gray-300">
+                    <li><code>method</code>: The deconvolution method employed for estimating the HRF (defaults to 'toeplitz')</li>
+                    <li><code>doi</code>: DOI of paper describing dataset and HRF origin (defaults to 'temp')</li>
+                    <li><code>ch_name</code>: Channel name from which the HRF was estimated (defaults to 'global')</li>
+                    <li><code>study</code>: Study name HRF was estimated for (defaults to None)</li>
+                    <li><code>task</code>: Task name HRF was estimated from (defaults to None)</li>
+                    <li><code>conditions</code>: Experimental conditions (defaults to None)</li>
+                    <li><code>stimulus</code>: The stimulus type (defaults to None)</li>
+                    <li><code>intensity</code>: The intensity of the stimulus (defaults to None)</li>
+                    <li><code>duration</code>: The duration of the HRF estimate (defaults to 30.0 seconds)</li>
+                    <li><code>protocol</code>: The protocol name (defaults to None)</li>
+                    <li><code>age_range</code>: The age range of the subject pool used to estimate the HRF (defaults to None)</li>
+                    <li><code>demographics</code>: The demographics of the subject pool used to estimate the HRF (defaults to None)</li>
+                </ul>
+            <br><br>There are a number of ways one can filter on these contexts. Each experimental context
+            is inserted into a HRhash table alongside a pointer to it's tree node. The HRfunc.branch()
+            function accepts any of the 10 context items and returns a sub-tree that includes all 
+            nodes in the HRtree that matched your requested context.<br><br>
+
+    <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
+<pre><code class="language-python">
+<span class="text-blue-200">import</span> <span class="text-green-300">hrfunc</span> <span class="text-blue-200">as</span> <span class="text-green-300">hrf</span>
+
+<span class="text-gray-300"># Load a hrfunc montage</span>
+<span class="text-blue-200">montage</span> = <span class="text-green-300">hrf</span>.<span class="text-blue-200">montage</span>('study_HRFs.json')
+    
+<span class="text-gray-400"># Replace current HRtree with a sub-tree of context specific HRFs</span>
+<span class="text-blue-200">montage</span>.branch(age_range = [5, 6, 7, 8], task = ['stoop', 'n-back', 'tower of hanoi'])
+</code></pre>
+    </div>
+    
+            <br><br>The outputs of this branch call are similar, but may yeild HRFs with suboptimal similarity.
+            It's recommended to then filter the tree which then does a weighted similarity check on each
+            HRF within the tree and deletes any nodes that do not meet a threshold (defaulting too 95%)<br><br>
+    
+    <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
+<pre><code class="language-python">
+<span class="text-gray-400"># Filter your montage so it only contains HRFs of interest</span>
+<span class="text-blue-200">montage</span>.filter(threshold = 0.95) 
+</code></pre>
+    </div>
+            <br><br>You can also leverage the K-D trees data structure to look within regions of interest. The 
+            specific k-d tree structure used enables us to also quickly group together in uniquely
+            shaped clusters like spheres and boxes.<br><br>
+
+    <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
+<pre><code class="language-python">
+<span class="text-gray-400"># Filter your montage so it only contains HRFs of interest</span>
+<span class="text-blue-200">montage</span>.radius_search(optode, maximum_distance = 0.1)
+</code></pre>
+    </div>
+
+            <br><br>A radius search operation was applied within the HRtree but easily a custom box search 
+            could be implemented leveraging the k-d tree structure.
+        </p>
+    </div>
+  </div>
+
+{% endblock %}

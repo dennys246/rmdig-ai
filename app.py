@@ -36,6 +36,14 @@ def datasets():
 def hrfunc():
     return render_template("hrfunc.html")
 
+@app.route("/hrfunc_guide")
+def hrfunc_guide():
+    return render_template("hrfunc_guide.html")
+
+@app.route("/hrtree_guide")
+def hrtree_guide():
+    return render_template("hrtree_guide.html")
+
 @app.route("/hrf_upload")
 def hrf_upload():
     return render_template("hrf_upload.html")
@@ -77,6 +85,6 @@ def tools():
     return render_template("tools.html")
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 8000))
     app.run(host="0.0.0.0", port=port, debug=True)
 #    app.run(debug=True)

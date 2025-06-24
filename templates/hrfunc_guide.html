@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}About | RMD {% endblock %}
+
+{% block content %}
+
+<div class="py-16 px-4 md:px-8 max-w-6xl mx-auto dark:bg-gray-900 dark:text-gray-100">
+    <div>
+    <h2 class="text-4xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">Apply HRfunc to Your fNIRS Data</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <img src="{{ url_for('static', filename='img/hrf_estimate.png') }}"
+            alt="HRF estimate calculate from HRfunc" 
+            class="float-left mr-6 mb-4 w-86 rounded-xl shadow-lg border-4 border-indigo-500 dark:border-indigo-400">
+            <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                Achieve higher precision preprocessing of functional near infrared spectroscopy (fNIRS) data through HRF modeling and neural activity estimation.
+                <strong>HRfunc</strong> enables researchers to generate spatially distributed hemodynamic response functions (HRF), recover convolved neural activity through signal and HRF deconvolution, enabling higher precision neural activity recovery from hemoglobin signals.<br><br> 
+            </p>
+        </div>
+        <div>
+            <strong class="text-indigo-400">To get started, follow these steps:</strong><br>
+            <ol class="list-decimal list-inside mb-4">
+                <li>Install HRfunc package using pip: <br><code>pip install hrfunc</code></li>
+                <li>Create an <code>hrfunc.montage</code> object in python and pass in a fNIRS scan object to orient the tool to your fNIRS montage.</li>
+                <li>Estimate a subject specific HRF estimate by calling to the <code>montage.estimate_hrfs(scan, events)</code></li>
+                <li>Estimate a subject-pool wide HRF estimate per channel by calling to <code>montage.generate_distribution()</code> and save your results for future use.</li>
+                <li>(optional) If succesfully publishing a paper on the dataset used to estimate the HRF from, <a href="/hrf_upload">upload your estimated HRFs</a> alongside your DOI (pre-print is ok) for community usage</li>
+            </ol>
+        </p>
+        </div>
+    </div>
+  </div>
+
+{% endblock %}
