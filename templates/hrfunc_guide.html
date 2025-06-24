@@ -6,27 +6,67 @@
 
 <div class="py-16 px-4 md:px-8 max-w-6xl mx-auto dark:bg-gray-900 dark:text-gray-100">
     <div>
-    <h2 class="text-4xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">Apply HRfunc to Your fNIRS Data</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <img src="{{ url_for('static', filename='img/hrf_estimate.png') }}"
-            alt="HRF estimate calculate from HRfunc" 
-            class="float-left mr-6 mb-4 w-86 rounded-xl shadow-lg border-4 border-indigo-500 dark:border-indigo-400">
-            <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                Achieve higher precision preprocessing of functional near infrared spectroscopy (fNIRS) data through HRF modeling and neural activity estimation.
-                <strong>HRfunc</strong> enables researchers to generate spatially distributed hemodynamic response functions (HRF), recover convolved neural activity through signal and HRF deconvolution, enabling higher precision neural activity recovery from hemoglobin signals.<br><br> 
-            </p>
-        </div>
-        <div>
-            <strong class="text-indigo-400">To get started, follow these steps:</strong><br>
-            <ol class="list-decimal list-inside mb-4">
-                <li>Install HRfunc package using pip: <br><code>pip install hrfunc</code></li>
-                <li>Create an <code>hrfunc.montage</code> object in python and pass in a fNIRS scan object to orient the tool to your fNIRS montage.</li>
-                <li>Estimate a subject specific HRF estimate by calling to the <code>montage.estimate_hrfs(scan, events)</code></li>
-                <li>Estimate a subject-pool wide HRF estimate per channel by calling to <code>montage.generate_distribution()</code> and save your results for future use.</li>
-                <li>(optional) If succesfully publishing a paper on the dataset used to estimate the HRF from, <a href="/hrf_upload">upload your estimated HRFs</a> alongside your DOI (pre-print is ok) for community usage</li>
-            </ol>
-        </p>
-        </div>
+    <h2 class="text-4xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">Getting started with HRfunc</h2>
+        <br><br>
+        <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+        To use the HRfunc tool to estimate latent neural activity, one must accomplish three
+        <ol class="list-decimal pl-6 space-y-2 text-gray-700 dark:text-gray-300">
+            <li>Estimate subject level estimates for each subject</li>
+            <li>Generate a subject HRF distribution</li>
+            <li>Estimate neural activity for each subject</li>
+        </ol>
+        <br><br>To first estimate subject level HRFs, initialize a hrfunc.montage object and then iterate through each of your
+         <strong>raw</strong> scans passing them into the montage.estimate_hrf()<br><br>
+            
+    <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
+<pre><code class="language-python">
+<span class="text-blue-200">import</span> <span class="text-green-300">hrfunc</span> <span class="text-blue-200">as</span> <span class="text-green-300">hrf</span>
+
+<span class="text-gray-300"># Load in NIRX scans</span>
+<span class="text-blue-200">raw_scan</span> = <span class="text-green-300">mne</span>.io.read_raw_nirx("path/to/your/nirx/scan/")
+
+<span class="text-gray-300"># Load a hrfunc montage</span>
+<span class="text-blue-200">montage</span> = <span class="text-green-300">hrf</span>.<span class="text-blue-200">montage</span>(raw_scan)
+    
+<span class="text-gray-300"># Iterate through each of your MNE NIRX scans and estimate an HRF for it</span>
+<span class="text-purple-300">for</span> <span class="text-blue-200">scan</span> <span class="text-purple-300">in</span> <span class="text-blue-200">raw_scans</span>:
+    <span class="text-blue-200">montage</span>.estimate_hrf(duration = 30.0)
+
+</code></pre>
+    </div>
+            <br><br>After passing each scan into your montage to have HRFs estimated, you can now
+            average across subject estimates to generate a subject-pool wide HRF estimate for each channel. <br><br>
+    
+    <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
+<pre><code class="language-python">
+<span class="text-gray-300"># Generate subject pool wide distribution</span>
+<span class="text-blue-200">montage</span>.generate_distribution() 
+<span class="text-blue-200">montage</span>.save() 
+</code></pre>
+</div>
+<br><br>Once your channel-wise HRF estimates are generated, they'll be outputted into a plots folder for your review...<br><br>
+    
+<div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
+<pre><code class="language-python">
+<span class="text-gray-300"># Generate subject pool wide distribution</span>
+<span class="text-blue-200">montage</span>.generate_distribution() 
+<span class="text-blue-200">montage</span>.save() 
+</code></pre>
+    </div>
+
+    </div>
+            <br><br>After generating a subject-pool wide distribution, an HRF estimate will be attached to each of
+            your channels nodes for use in estimating neural activity. Now to finally estimate neural activity you 
+            must iterate through each of your scans and call for neural activity to me estimated.<br><br>
+
+    <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
+<pre><code class="language-python">
+<span class="text-gray-400"># Estimate neural activity in place and save the nirx object</span>
+<span class="text-purple-300">for</span> <span class="text-blue-200">scan</span> <span class="text-purple-300">in</span> <span class="text-blue-200">raw_scans</span>:
+    <span class="text-blue-200">montage</span>.estimate_activity(<span class="text-blue-200">scan</span>)
+    <span class="text-blue-200">scan</span>.save('sub-123_deconvolved.fif')
+</code></pre>
+    </div>
     </div>
   </div>
 
