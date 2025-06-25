@@ -6,17 +6,21 @@
 
 <div class="py-16 px-4 md:px-8 max-w-6xl mx-auto dark:bg-gray-900 dark:text-gray-100">
     <div>
-    <h2 class="text-4xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">Getting started with HRfunc</h2>
+    <h2 class="text-4xl font-bold mb-4 text-indigo-600 dark:text-indigo-400 text-center">Getting Started with HRfunc</h2>
         <br><br>
-        <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+        <p class="text-lg text-white leading-relaxed mb-4">
         To use the HRfunc tool to estimate latent neural activity, one must accomplish three
         <ol class="list-decimal pl-6 space-y-2 text-gray-700 dark:text-gray-300">
             <li>Estimate subject level estimates for each subject</li>
             <li>Generate a subject HRF distribution</li>
             <li>Estimate neural activity for each subject</li>
         </ol>
-        <br><br>To first estimate subject level HRFs, initialize a hrfunc.montage object and then iterate through each of your
-         <strong>raw</strong> scans passing them into the montage.estimate_hrf()<br><br>
+        <br><br>To first estimate subject level HRFs, initialize a <code class="language-python"><span class="text-green-200">hrfunc</span>.<span class="text-blue-200">montage</span>()</code>
+        object and then iterate through each of your <strong>raw</strong> scans passing them into the
+        <code class="language-python"><span class="text-blue-200">montage</span>.estimate_hrf()</code> 
+        function. The <strong>HRfunc</strong> tool will automatically preprocess them for deconvolution, which is distinctly different than standard 
+        hemoglobin preprocessing. The <code class="language-python">_lambda</code> variable can be tuned to increase and decrease noise suppresion 
+        within the signal.<br><br>
             
     <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
 <pre><code class="language-python">
@@ -30,7 +34,7 @@
     
 <span class="text-gray-300"># Iterate through each of your MNE NIRX scans and estimate an HRF for it</span>
 <span class="text-purple-300">for</span> <span class="text-blue-200">scan</span> <span class="text-purple-300">in</span> <span class="text-blue-200">raw_scans</span>:
-    <span class="text-blue-200">montage</span>.estimate_hrf(duration = 30.0)
+    <span class="text-blue-200">montage</span>.estimate_hrf(duration = 30.0, _lambda = 1.0)
 
 </code></pre>
     </div>
@@ -41,25 +45,18 @@
 <pre><code class="language-python">
 <span class="text-gray-300"># Generate subject pool wide distribution</span>
 <span class="text-blue-200">montage</span>.generate_distribution() 
-<span class="text-blue-200">montage</span>.save() 
+<span class="text-blue-200">montage</span>.save('study_HRFs.json') 
 </code></pre>
 </div>
-<br><br>Once your channel-wise HRF estimates are generated, they'll be outputted into a plots folder for your review...<br><br>
-    
+</div>
+<br><br>After generating a subject-pool wide distribution, an HRF estimate will be attached to each of
+your hrf montage channel nodes for use in estimating neural activity.
+
+<br><br>Now using our estimated HRFs we can estimate neural activity! To accomplish this
+you must iterate through each of your scans and pass them into your <code class="language-python"><span class="text-blue-200">montage</span>.estimate_activity(raw)</code>. This will replace channel
+hemoglobin data in place using using MNEs raw.apply_function() to each channel using
+you're estimated channel HRF.<br><br>
 <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
-<pre><code class="language-python">
-<span class="text-gray-300"># Generate subject pool wide distribution</span>
-<span class="text-blue-200">montage</span>.generate_distribution() 
-<span class="text-blue-200">montage</span>.save() 
-</code></pre>
-    </div>
-
-    </div>
-            <br><br>After generating a subject-pool wide distribution, an HRF estimate will be attached to each of
-            your channels nodes for use in estimating neural activity. Now to finally estimate neural activity you 
-            must iterate through each of your scans and call for neural activity to me estimated.<br><br>
-
-    <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
 <pre><code class="language-python">
 <span class="text-gray-400"># Estimate neural activity in place and save the nirx object</span>
 <span class="text-purple-300">for</span> <span class="text-blue-200">scan</span> <span class="text-purple-300">in</span> <span class="text-blue-200">raw_scans</span>:

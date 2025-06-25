@@ -8,7 +8,7 @@
     }
   </script>
   <meta charset="UTF-8">
-  <title class="text-white hover:text-indigo-400">{% block title %}Rocky Mountain Digerati{% endblock %}</title>
+  <title>{% block title %}Rocky Mountain Digerati{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,600,700&display=swap" rel="stylesheet">
@@ -16,7 +16,10 @@
     body { font-family: 'Inter', sans-serif; }
   </style>
 </head>
-<body class="bg-gray-800 dark:bg-gray-900">
+
+<body class="bg-gray-800 dark:bg-gray-900 min-h-screen flex flex-col">
+
+  <!-- Header -->
   <header class="p-4 bg-indigo-600 text-white shadow">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
       <h1 class="text-2xl font-bold hover:text-indigo-400"><a href="/">RMD</a></h1>
@@ -24,14 +27,26 @@
         <a href="/mission" class="text-white hover:text-indigo-400">Mission</a>
         <a href="/tools" class="text-white hover:text-indigo-400">Tools</a>
         <a href="/datasets" class="text-white hover:text-indigo-400">Datasets</a>
-        <a href="/about" class="text-white hover:text-indigo-400">About</a>
-        <a href="/contact" class="text-white hover:text-indigo-400">Contact Us</a>
+        <a href="/events" class="text-white hover:text-indigo-400">Events</a>
       </nav>
     </div>
   </header>
 
-  <main class="max-w-4xl mx-auto p-6 mt-6 bg-blue rounded-2xl shadow-md">
+  <!-- Main content -->
+  <main class="max-w-4xl mx-auto p-6 mt-6 bg-blue rounded-2xl shadow-md flex-grow">
     {% block content %}{% endblock %}
   </main>
+
+  <!-- Footer -->
+  <footer class="bg-black mt-auto">
+    <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
+      <p>&copy; 2025 Denny Schaedig. All rights reserved.</p>
+      <div class="flex gap-4 mt-2 md:mt-0">
+        <a href="/contact" class="hover:text-indigo-500">Contact Me</a>
+        <a href="/about" class="hover:text-indigo-500">About Me</a>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>

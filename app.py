@@ -48,6 +48,10 @@ def hrtree_guide():
 def hrf_upload():
     return render_template("hrf_upload.html")
 
+@app.route("/events")
+def events():
+    return render_template("events.html")
+
 @app.route('/upload', methods=['POST'])
 def upload_json():
     file = request.files.get('jsonFile')
