@@ -6,22 +6,22 @@
 
 <div class="py-16 px-4 md:px-8 max-w-6xl mx-auto dark:bg-gray-900 dark:text-gray-100">
     <div>
-    <h2 class="text-4xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">Explore the HRtree</h2>
+    <h2 class="text-4xl font-bold mb-4 text-indigo-600 dark:text-indigo-400 text-center">Exploring the HRtree</h2>
         <br><br>
-        <div class="w-full bg-yellow-200 text-yellow-900 text-center text-sm font-medium py-2 px-4 rounded-md">
+        <div class="w-full bg-yellow-200 text-yellow-900 text-sm font-medium py-2 px-4 rounded-md">
         WARNING ⚠️ The HRtree is an experimental community resource that currently contains a limited amount of
         HRFs contributed by the neuroimaging community. Over time we hope this community resource
-        will grow, however currently functionality listed below is sub-optimal and estimating your own
+        will grow, however currently functionality listed below is sub-optimal. Estimating your own
         HRFs or use of a canonical HRF for estimating neural activity may be required.
         </div>  <br><br>
         <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
             A core component of the HRfunc tool is the HRtree, a hybrid tree-hash table data
             structure that efficiently stores HRF estimates with rich detail of their origins.
             Leveraging this data structure users can filter the HRtree for experimental contexts
-            of interest like age range or experimental task. Here are the 10 primary contexts 
-            filterable within the HRtree...<br><br>
+            of interest like age range or experimental task.<br><br>
 
-            <h3 class="text-2xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400">Key HRF Contexts</h3>
+            <h3 class="text-2xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400 text-center">Key HRF Contexts</h3><br>
+                Here are the 10 primary contexts filterable within the HRtree...<br><br>
                 <ul class="list-disc pl-6 space-y-2 text-gray-800 dark:text-gray-300">
                     <li><code>method</code>: The deconvolution method employed for estimating the HRF (defaults to 'toeplitz')</li>
                     <li><code>doi</code>: DOI of paper describing dataset and HRF origin (defaults to 'temp')</li>
@@ -36,6 +36,10 @@
                     <li><code>age_range</code>: The age range of the subject pool used to estimate the HRF (defaults to None)</li>
                     <li><code>demographics</code>: The demographics of the subject pool used to estimate the HRF (defaults to None)</li>
                 </ul>
+
+            
+            <br><br><h2 class = "text-2xl text-indigo-400 text-center font-semibold">Finding Experimentally Relavent HRFs</h3>
+            
             <br><br>There are a number of ways one can filter on these contexts. Each experimental context
             is inserted into a HRhash table alongside a pointer to it's tree node. The HRfunc.branch()
             function accepts any of the 10 context items and returns a sub-tree that includes all 

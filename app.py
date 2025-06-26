@@ -12,9 +12,41 @@ def home():
 def about():
     return render_template("about.html")
 
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
 @app.route("/mission")
 def mission():
     return render_template("mission.html")
+
+@app.route("/tools")
+def tools():
+    return render_template("tools.html")
+
+@app.route("/avai")
+def avai():
+    return render_template("avai.html")
+
+@app.route("/snowgan")
+def snowgan():
+    return render_template("snowgan.html")
+
+@app.route("/corediff")
+def corediff():
+    return render_template("corediff.html")
+
+@app.route("/datasets")
+def datasets():
+    return render_template("datasets.html")
+
+@app.route("/snowpack_dataset")
+def snowpack_dataset():
+    return render_template("snowpack_dataset.html")
+
+@app.route("/events")
+def events():
+    return render_template("events.html")
 
 @app.route("/ramblings")
 def ramblings():
@@ -23,14 +55,6 @@ def ramblings():
 @app.route("/boldnet")
 def boldnet():
     return render_template("boldnet.html")
-
-@app.route("/contact")
-def contact():
-    return render_template("contact.html")
-
-@app.route("/datasets")
-def datasets():
-    return render_template("datasets.html")
 
 @app.route("/hrfunc")
 def hrfunc():
@@ -47,10 +71,6 @@ def hrtree_guide():
 @app.route("/hrf_upload")
 def hrf_upload():
     return render_template("hrf_upload.html")
-
-@app.route("/events")
-def events():
-    return render_template("events.html")
 
 @app.route('/upload', methods=['POST'])
 def upload_json():
@@ -75,18 +95,6 @@ def upload_json():
 
     flash('JSON uploaded successfully.', 'success')
     return redirect(url_for('index'))
-
-@app.route("/snowgan")
-def snowgan():
-    return render_template("snowgan.html")
-
-@app.route("/snowpack_dataset")
-def snowpack_dataset():
-    return render_template("snowpack_dataset.html")
-
-@app.route("/tools")
-def tools():
-    return render_template("tools.html")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
