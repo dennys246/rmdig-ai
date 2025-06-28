@@ -25,15 +25,15 @@
       <h1 class="text-2xl font-bold hover:text-indigo-400"><a href="/">RMD</a></h1>
       <nav class="space-x-4">
         <a href="/mission" class="text-white hover:text-indigo-400">Mission</a>
-        <a href="/tools" class="text-white hover:text-indigo-400">Tools</a>
-        <a href="/datasets" class="text-white hover:text-indigo-400">Datasets</a>
+        <a href="/models" class="text-white hover:text-indigo-400">Models</a>
+        <a href="/snowpack_dataset" class="text-white hover:text-indigo-400">Data</a>
         <a href="/events" class="text-white hover:text-indigo-400">Events</a>
       </nav>
     </div>
   </header>
 
   <!-- Main content -->
-  <main class="max-w-4xl mx-auto p-6 mt-6 bg-blue rounded-2xl shadow-md flex-grow">
+  <main class="{% block main_class %}max-w-4xl mx-auto p-6 mt-6 bg-blue rounded-2xl shadow-md{% endblock %} flex-grow">
     {% block content %}{% endblock %}
   </main>
 
