@@ -8,3 +8,15 @@ body {
   form {
     margin-top: 1rem;
   }
+
+@layer utilities {
+  .outlined-text-black {
+    @apply text-indigo-800;
+    text-shadow:
+      -1px -1px 0 black,
+       1px -1px 0 black,
+      -1px  1px 0 black,
+       1px  1px 0 black;
+    -webkit-text-stroke: 1px black; /* optional, better in Chrome/Safari */
+  }
+}
