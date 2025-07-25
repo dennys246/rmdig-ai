@@ -10,7 +10,7 @@
             <h2 class="text-4xl text-center font-bold mb-4 text-indigo-600 dark:text-indigo-400">Rocky Mountain<br>Snowpack Data</h2>
             <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1086662296?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="snowgan_snowpack_intro_denny_schaedig"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
         <p class="mt-2 text-center text-indigo-200 dark:text-indigo-200 italic">
-            Methodology of the snowGAN and how snowpack data was collected. Dataset and models to be released after publication of methodology to allow for proper validation by the community.
+            Overview of the Rocky Mountain Snowpack dataset and the snowGAN.
         </p>
         </div> 
         <div>
@@ -19,18 +19,98 @@
             <img src="{{ url_for('static', filename='img/snow_profile_2.jpeg') }}"
             alt="Snow profile magnified"
             class="float-left mr-6 mb-4 w-64 rounded-lg shadow-lg">
-                <strong class="dark:text-indigo-400">~1500 snowpack samples</strong> from <strong class="dark:text-indigo-400">two visual modalities</strong> were collected using a mini-coring method<br><br>
-                Each sample is caputered in a <strong class="dark:text-indigo-400">chronological order</strong> and can be related in time and space to weather, geographical, and site data.<br><br>
+                <strong class="dark:text-indigo-400">~1500 snowpack samples</strong> from <strong class="dark:text-indigo-400">two visual modalities</strong> were collected using a novel mini-coring method developed by Denny Schaedig.
+                Each sample is captured in a <strong class="dark:text-indigo-400">chronological order</strong> and can be related in time and space to weather, geographical, and site data. Our hope is to make the uniquely
+                collected snowpack samples a means to explore next generation computer vision concepts to assist in avalanche risk predicion, or really whatever peaks your interest!<br><br>
             </p>
             <img src="{{ url_for('static', filename='img/core_1_split.JPG') }}"
             alt="Snow profile magnified"
             class="float-left mr-6 mb-4 w-64 rounded-lg shadow-lg">
             <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
 
-                Our hope is to make the uniquely collected snowpack samples a means to explore next generation computer vision concepts to assist in avalanche risk predicion.<br><br>
-                <a href="/snowgan"><strong class="dark:text-indigo-400 hover:text-indigo-800">snowGAN</strong></a> and <strong class="dark:text-indigo-400">coreDiffusor</strong> 
-                are our first steps in exploring these modalities. We hope to publish a paper on the methodology of data collection and modeling, once published we will make the data freely available to download.
+                
+                <a href="/snowgan"><strong class="text-indigo-400 hover:text-indigo-800">snowGAN</strong></a> and <a href = "/corediff" class="text-indigo-400 hover:text-indigo-800 font-bold">coreDiffusor</a> 
+                are our first steps in exploring these modalities and we are currently building AvAI, an AI predicting avalanche risk by embedding both the snowGAN and coreDiffusor
+                alongside weather timeseries to improve avalanche prediction. Aside from this we hope people interested in machine learning can use this dataset to explore 
+                machine learning itself, whether it be predicting avalanche risk or generating high resolution artificial images of snow.
+                <br><br>
+                <h1 class = "text-2xl text-center font-bold text-indigo-400">Accessing the Rocky Mountain Snowpack Dataset</h1><br>
+                The dataset is stored in <a href = "https://huggingface.co/datasets/dennys246/rocky_mountain_snowpack" class = "text-indigo-400 hover:text-indigo-600 font-bold">Hugging Face</a> and can 
+                be downloaded directly from pythons huggingface_hub library. You do not have to create an account, however it is recommended to 
+                create one and explore everything Hugging Face has to offer at <a href = "www.huggingface.co">huggingface.co</a>. Who knows,
+                you may find youself wanting to upload a model you created in no time!
+                
+                To just download the dataset, you can download it in two lines easily...<br>
             </p>
+            </div><br>
+<div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
+<pre><code class="language-python">
+<span class="text-purple-300">from</span> huggingface_hub <span class="text-purple-300">import</span> snapshot_download
+
+<span class="text-gray-300"># Download snowpack dataset locally</span>
+snapshot_download(<span class="text-green-300">"dennys246/rocky_mountain_snowpack"</span>)
+</code></pre></div>
+    <div>
+    <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+        <br>For training your own machine learning algorithm, you may also find it useful to simply load
+        in only references. To accomplish this you can simply load the training data through the 
+        datasets library like this...
+
+<div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
+<pre><code class="language-python">
+<span class="text-purple-300">from</span> datasets <span class="text-purple-300">import</span> load_dataset
+
+<span class="text-gray-300"># Load dataset references through git lfs for low-memory access</span>
+dataset = load_dataset(<span class="text-green-300">"dennys246/rocky_mountain_snowpack"</span>)
+</code></pre></div>
+    
+    </p></div>
+
+    <div>
+        <p><br>
+            Once you have downloaded the data you will find number of folders containing snowpack data
+            in various forms...
+        </p>
+        <section>
+            <br>
+        <pre>
+        🏔️ rocky_mountain_snowpack
+        ┣ 📂 corrected <span class="text-gray-300"># Contains preprocessed images used for final segmentation</span>
+        ┣ 📂 labels <span class="text-gray-300"># Contains labels for all images</span>
+        ┣ 📂 pilot <span class="text-gray-300"># Contains raw images from first collection site</span>
+        ┣ 📂 raw <span class="text-gray-300"># Contains raw images from all valid sites, excluding pilot </span>
+        ┣ 📂 segmented <span class="text-gray-300"># Contains images segmented from the corrected files</span>
+        ┃  ┗ 📂 cores <span class="text-gray-300"># Contains images of the snow cores</span>
+        ┃  ┗ 📂 labels <span class="text-gray-300"># Contains images of segmented labels used for determining location</span>
+        ┃  ┗ 📂 profiles <span class="text-gray-300"># Contains non-magnified images of snowpack</span>
+        ┃  ┗ 📂 magnified-profiles <span class="text-gray-300"># Contains magnified images of snowpack</span>
+        ┣ 📜 LICENSE.txt <span class="text-gray-300"># CC-by-4.0 license</span>
+        ┗ 📜 README.md <span class="text-gray-300"># Dataset guide, read!</span>
+        </pre>
+        </section>
+    </div>
+    <div>
+        The fully segmented and preprocess data will be within the segmented folders
+        like rocky_mountain_snowpack/segmented/magnified_profiles. The comprehensive csv
+        of labels for each image can be found within the labels folder. Note that each image
+        will have a series of numbers following the picture name that will indicate where it came from.
+        <br><br>
+        If the image is labeled as IMG_XXXX_1_2_3_4.JPG, this means this image came from site 1, column 2 (as in a second column of
+        cores collected from the same site), mini-core 3, and finally segment 4 (the 4th naturally forming segment in a core).
+        An image with only 3 following numbers (e.g. IMG_XXXX_1_2_3.JPG) indicates the image is only a core image, and you will not find
+        a corresponding snowpack segment for that image.
+        <br><br>
+    </div>
+    <div>
+        <img src="{{ url_for('static', filename='img/example_crystalcard.JPG') }}"
+            alt="Example crystal card"
+            class="float-left mr-6 mb-4 w-96 rounded-lg shadow-lg">
+        For example, the label for this crystal card indicates this image was collected
+        from the 1st site, in the 1st column, in the 4th core, and we are picturing the
+        first segment (e.g. IMG_XXXX_1_1_4_1.JPG). <br><br>It looks like the snowpack core segmented
+        into 3 segments through the mini-coring method, so we can expect to see magnified and regular profiles of 2 more segments,
+        IMG_XXXY_1_1_4_2.JPG and IMG_XXXZ_1_1_4_3.JPG. Segments are always collected from left to right to preserving the chronological order.
+    </div>
         </div>
     </div>
   </div>
