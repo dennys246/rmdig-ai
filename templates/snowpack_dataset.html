@@ -16,16 +16,28 @@
         <div>
             <br><br>
             <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-            <img src="{{ url_for('static', filename='img/snow_profile_2.jpeg') }}"
-            alt="Snow profile magnified"
-            class="float-left mr-6 mb-4 w-64 rounded-lg shadow-lg">
+                <figure class="float-left mr-6 mb-4 w-64">
+                <img src="{{ url_for('static', filename='img/snow_profile_2.jpeg') }}"
+                    alt="Snow profile magnified"
+                    class="rounded-lg shadow-lg w-full">
+                <figcaption class="text-sm text-gray-600 mt-2 text-center">
+                    Snow profile magnified
+                </figcaption>
+                
+            </figure>
+            <br><br>
                 <strong class="dark:text-indigo-400">~1500 snowpack samples</strong> from <strong class="dark:text-indigo-400">two visual modalities</strong> were collected using a novel mini-coring method developed by Denny Schaedig.
                 Each sample is captured in a <strong class="dark:text-indigo-400">chronological order</strong> and can be related in time and space to weather, geographical, and site data. Our hope is to make the uniquely
                 collected snowpack samples a means to explore next generation computer vision concepts to assist in avalanche risk predicion, or really whatever peaks your interest!<br><br>
             </p>
+            <figure class="float-left mr-6 mb-4 w-64">
             <img src="{{ url_for('static', filename='img/core_1_split.JPG') }}"
-            alt="Snow profile magnified"
-            class="float-left mr-6 mb-4 w-64 rounded-lg shadow-lg">
+                alt="Snow profile magnified"
+                class="rounded-lg shadow-lg w-full">
+            <figcaption class="text-sm text-gray-600 mt-2 text-center">
+                Snow mini-core that split in half
+            </figcaption>
+            </figure>
             <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
 
                 
@@ -107,7 +119,7 @@ dataset = load_dataset(<span class="text-green-300">"dennys246/rocky_mountain_sn
             class="float-left mr-6 mb-4 w-96 rounded-lg shadow-lg">
         For example, the label for this crystal card indicates this image was collected
         from the 1st site, in the 1st column, in the 4th core, and we are picturing the
-        first segment (e.g. IMG_XXXX_1_1_4_1.JPG). <br><br>It looks like the snowpack core segmented
+        1st segment (e.g. IMG_XXXX_1_1_4_1.JPG). <br><br>It looks like the snowpack core segmented
         into 3 segments through the mini-coring method, so we can expect to see magnified and regular profiles of 2 more segments,
         IMG_XXXY_1_1_4_2.JPG and IMG_XXXZ_1_1_4_3.JPG. Segments are always collected from left to right to preserving the chronological order.
     </div>
