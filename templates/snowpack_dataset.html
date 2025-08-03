@@ -52,21 +52,9 @@
                 create one and explore everything Hugging Face has to offer at <a href = "www.huggingface.co">huggingface.co</a>. Who knows,
                 you may find youself wanting to upload a model you created in no time!
                 
-                To just download the dataset, you can download it in two lines easily...<br>
-            </p>
-            </div><br>
-<div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
-<pre><code class="language-python">
-<span class="text-purple-300">from</span> huggingface_hub <span class="text-purple-300">import</span> snapshot_download
-
-<span class="text-gray-300"># Download snowpack dataset locally</span>
-snapshot_download(<span class="text-green-300">"dennys246/rocky_mountain_snowpack"</span>)
-</code></pre></div>
     <div>
     <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-        <br>For training your own machine learning algorithm, you may also find it useful to simply load
-        in only references. To accomplish this you can simply load the training data through the 
-        datasets library like this...
+        <br>You can easily load the dataset in no time through Hugging Face's datasets library...
 
 <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
 <pre><code class="language-python">
@@ -74,8 +62,20 @@ snapshot_download(<span class="text-green-300">"dennys246/rocky_mountain_snowpac
 
 <span class="text-gray-300"># Load dataset references through git lfs for low-memory access</span>
 dataset = load_dataset(<span class="text-green-300">"dennys246/rocky_mountain_snowpack"</span>)
+</code></pre></div><br>
+Or if you wish to just download the dataset, you can download it easily through Hugging Face's snapshot_download function!<br>
+</p>
+</div><br>
+<div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
+<pre><code class="language-python">
+<span class="text-purple-300">from</span> huggingface_hub <span class="text-purple-300">import</span> snapshot_download
+
+<span class="text-gray-300"># Download snowpack dataset locally</span>
+snapshot_download(
+    repo_id=<span class="text-green-300">"dennys246/rocky_mountain_snowpack"</span>,
+    repo_type=<span class="text-green-300">"dataset"</span>,
+    local_dir=<span class="text-green-300">"path/to/local/dir/"</span>)
 </code></pre></div>
-    
     </p></div>
 
     <div>
@@ -87,41 +87,62 @@ dataset = load_dataset(<span class="text-green-300">"dennys246/rocky_mountain_sn
             <br>
         <pre>
         🏔️ rocky_mountain_snowpack
-        ┣ 📂 corrected <span class="text-gray-300"># Contains preprocessed images used for final segmentation</span>
         ┣ 📂 labels <span class="text-gray-300"># Contains labels for all images</span>
-        ┣ 📂 pilot <span class="text-gray-300"># Contains raw images from first collection site</span>
-        ┣ 📂 raw <span class="text-gray-300"># Contains raw images from all valid sites, excluding pilot </span>
-        ┣ 📂 segmented <span class="text-gray-300"># Contains images segmented from the corrected files</span>
+        ┣ 📂 preprocessed <span class="text-gray-300"># Contains the fully preprocessed snowpack images</span>
         ┃  ┗ 📂 cores <span class="text-gray-300"># Contains images of the snow cores</span>
-        ┃  ┗ 📂 labels <span class="text-gray-300"># Contains images of segmented labels used for determining location</span>
-        ┃  ┗ 📂 profiles <span class="text-gray-300"># Contains non-magnified images of snowpack</span>
         ┃  ┗ 📂 magnified-profiles <span class="text-gray-300"># Contains magnified images of snowpack</span>
+        ┃  ┗ 📂 profiles <span class="text-gray-300"># Contains non-magnified images of snowpack</span>
+        ┃  ┗ 📂 written_labels <span class="text-gray-300"># Contains images of segmented labels used for determining location</span>
+        ┣ 📂 raw <span class="text-gray-300"># Contains raw images of snowpack collected from the rocky mountains using the mini-coring method </span>
+        ┃  ┗ 📂 magnified-profiles <span class="text-gray-300"># Contains magnified images of snowpack</span>
+        ┃  ┗ 📂 crystal_cards <span class="text-gray-300"># Contains images of unsegmented crystal cards</span>
         ┣ 📜 LICENSE.txt <span class="text-gray-300"># CC-by-4.0 license</span>
         ┗ 📜 README.md <span class="text-gray-300"># Dataset guide, read!</span>
         </pre>
         </section>
     </div>
     <div>
-        The fully segmented and preprocess data will be within the segmented folders
-        like rocky_mountain_snowpack/segmented/magnified_profiles. The comprehensive csv
-        of labels for each image can be found within the labels folder. Note that each image
-        will have a series of numbers following the picture name that will indicate where it came from.
-        <br><br>
-        If the image is labeled as IMG_XXXX_1_2_3_4.JPG, this means this image came from site 1, column 2 (as in a second column of
-        cores collected from the same site), mini-core 3, and finally segment 4 (the 4th naturally forming segment in a core).
-        An image with only 3 following numbers (e.g. IMG_XXXX_1_2_3.JPG) indicates the image is only a core image, and you will not find
-        a corresponding snowpack segment for that image.
-        <br><br>
+        The fully segmented and preprocess data will be within the preprocessed folders
+        like rocky_mountain_snowpack/preprocessed/magnified_profiles. Labels for each image can be found
+         within the JSONL files found in the metadata folder (i.e. rocky_mountain_snowpack/metadata/preprocessed.jsonl). 
+         Each image is attached spatially and temporally to the other images, especially across the datatypes cores, magnified profiles,
+         and profiles. <br><br>
+        This dataset was collected with a method that allows you to related each image
+        within the dataset to all the other images in the dataset, alongside environmental
+        features like  world outside of the image! Each image is attached to
+        a specific time and location, alongsige it's location in the snowpack, allowing you to
+        relate important timeseries to the data such as temperature, snowfall, or avalanch risk
+        predictions from the Colorado Avalanche Information Center. Alongside this a rich amount of
+        other data is collected at each site to create a 
+        <a href ='https://huggingface.co/datasets/dennys246/rocky_mountain_snowpack#labels' class = 'font-bold text-indigo-400 hover:text-indigo-800'>comprehensive labeling</a> of each image.
     </div>
     <div>
-        <img src="{{ url_for('static', filename='img/example_crystalcard.JPG') }}"
+        <br><img src="{{ url_for('static', filename='img/example_crystalcard.JPG') }}"
             alt="Example crystal card"
             class="float-left mr-6 mb-4 w-96 rounded-lg shadow-lg">
         For example, the label for this crystal card indicates this image was collected
         from the 1st site, in the 1st column, in the 4th core, and we are picturing the
-        1st segment (e.g. IMG_XXXX_1_1_4_1.JPG). <br><br>It looks like the snowpack core segmented
-        into 3 segments through the mini-coring method, so we can expect to see magnified and regular profiles of 2 more segments,
-        IMG_XXXY_1_1_4_2.JPG and IMG_XXXZ_1_1_4_3.JPG. Segments are always collected from left to right to preserving the chronological order.
+        1st segment. If we looked at the label for the image we would see these same labels
+         attached to the image in the metadata alongside the following information
+        <div>
+            <ul class = 'bullet-list'>
+                <li>Datatype</li>
+                <li>Avalanches spotted</li>
+                <li>Wind loading</li>
+                <li>Snowpack depth</li>
+                <li>Core depth</li>
+                <li>Slope face</li>
+                <li>Slope angle</li>
+                <li>Air temperature</li>
+                <li>Core temperature</li>
+            </ul>
+        </div>
+        Using this information we can train an AI to do so many things! So far as mentioned I've built 
+        two generative models to try and learn the features of the datatypes themselves, through generative AI.<br><br>
+        Using these same pre-trained models, or your own model you've built from scratch, we could leverage machine 
+        learning to train all kinds of AI. Most importantly we could try and predict the avalanche risk, each image
+        has a label for avalanches spotted nearby attached. If we trained an AI to predict this, then simply outputted
+        the number of avalanches it could be a metric of avalanche activity.<br><br>
     </div>
         </div>
     </div>
