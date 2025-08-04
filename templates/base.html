@@ -29,20 +29,50 @@
     ul.bullet-list li {
       margin: 0.5em 0;
     }
+    .logo-wrapper {
+    position: relative;
+    display: inline-block;
+    }
+    .logo-wrapper img {
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+
+    .logo-hover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
+
+    .logo-wrapper:hover .logo-hover {
+      opacity: 1;
+    }
+
+    .logo-wrapper:hover .logo-default {
+      opacity: 0;
+    }
+
+    .chalk-text {
+    font-family: 'Chalkboard', 'Comic Sans MS', cursive;
+    }
   </style>
 </head>
 
 <body class="bg-gray-800 dark:bg-gray-900 min-h-screen flex flex-col">
 
   <!-- Header -->
-  <header class="p-4 bg-indigo-600 text-white shadow">
+  <header class="p-4 bg-black text-white shadow">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-bold hover:text-indigo-400 italic font-[cursive]"><a href="/">RMDig</a></h1>
-      <nav class="space-x-4">
-        <a href="/mission" class="text-white hover:text-indigo-400">Mission</a>
-        <a href="/models" class="text-white hover:text-indigo-400">Models</a>
-        <a href="/snowpack_dataset" class="text-white hover:text-indigo-400">Data</a>
-        <a href="/events" class="text-white hover:text-indigo-400">Events</a>
+      <a href="/" class="logo-wrapper">
+        <img src="/static/img/rmdig_logo_black.png" alt="RMDig Logo" class="logo-default" />
+        <img src="/static/img/rmdig_logo_indigo.png" alt="RMDig Hover Logo" class="logo-hover" />
+      </a>
+      <nav class="space-x-4 text-xl">
+        <a href="/mission" class="chalk-text text-white hover:text-indigo-400">Mission</a>
+        <a href="/snowpack_dataset" class="chalk-text text-white hover:text-indigo-400">Data</a>
+        <a href="/models" class="chalk-text text-white hover:text-indigo-400">Models</a>
+        <a href="/events" class="chalk-text text-white hover:text-indigo-400">Events</a>
       </nav>
     </div>
   </header>
@@ -55,10 +85,10 @@
   <!-- Footer -->
   <footer class="bg-black mt-auto">
     <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
-      <p>&copy; 2025 Denny Schaedig. All rights reserved.</p>
+      <p>&copy; 2025 Rocky Mountain Digerati, LLC. All rights reserved.</p>
       <div class="flex gap-4 mt-2 md:mt-0">
-        <a href="/contact" class="hover:text-indigo-500">Contact Me</a>
-        <a href="/about" class="hover:text-indigo-500">About Me</a>
+        <a href="/contact" class="hover:text-indigo-500">Contact Us</a>
+        <a href="/about" class="hover:text-indigo-500">About RMDig</a>
       </div>
     </div>
   </footer>
