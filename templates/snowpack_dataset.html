@@ -39,7 +39,7 @@
                 Overview of the Rocky Mountain Snowpack dataset and the snowGAN.
             </p>
             </div> <br><br>
-            <h1 class = "text-2xl text-center font-bold text-indigo-400">Accessing the Rocky Mountain Snowpack Dataset</h1><br>
+            <h1 class = "text-2xl text-center font-bold text-indigo-400">Accessing the Dataset</h1><br>
             The dataset is stored in <a href = "https://huggingface.co/datasets/dennys246/rocky_mountain_snowpack" class = "text-indigo-400 hover:text-indigo-600 font-bold">Hugging Face</a> and can 
             be downloaded directly from pythons huggingface_hub library. You do not have to create an account, however it is recommended to 
             create one and explore everything Hugging Face has to offer at <a href = "www.huggingface.co">huggingface.co</a>. Who knows,
@@ -50,18 +50,24 @@
         <br>You can easily load the dataset in no time through Hugging Face's datasets library...
 
 <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
-<pre><code class="language-python">
-<span class="text-purple-300">from</span> datasets <span class="text-purple-300">import</span> load_dataset
+<pre><code class="language-python"><span class="text-purple-300">from</span> datasets <span class="text-purple-300">import</span> load_dataset
 
 <span class="text-gray-300"># Load dataset references through git lfs for low-memory access</span>
 dataset = load_dataset(<span class="text-green-300">"rmdig/rocky_mountain_snowpack"</span>)
 </code></pre></div><br>
-Or if you wish to just download the dataset, you can download it easily through Hugging Face's snapshot_download function!<br>
+You can also download the dataset through git and update it with periodic pulls.
+You will need to install lfs.<br>
 </p>
 </div><br>
+
 <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
-<pre><code class="language-python">
-<span class="text-purple-300">from</span> huggingface_hub <span class="text-purple-300">import</span> snapshot_download
+<pre><code>git clone https://huggingface.co/datasets/RMDig/rocky_mountain_snowpack
+</code></pre></div><br>
+
+Alternatively you could download the dataset through python through Hugging Face's snapshot_download function, but this can be difficult to version control. <br>
+<br>
+<div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6">
+<pre><code class="language-python"><span class="text-purple-300">from</span> huggingface_hub <span class="text-purple-300">import</span> snapshot_download
 
 <span class="text-gray-300"># Download snowpack dataset locally</span>
 snapshot_download(
@@ -88,6 +94,12 @@ snapshot_download(
         ┣ 📂 raw <span class="text-gray-300"># Contains raw images of snowpack collected from the rocky mountains using the mini-coring method </span>
         ┃  ┗ 📂 magnified-profiles <span class="text-gray-300"># Contains magnified images of snowpack</span>
         ┃  ┗ 📂 crystal_cards <span class="text-gray-300"># Contains images of unsegmented crystal cards</span>
+        ┣ 📂 metadata <span class="text-gray-300"># Metadata of the dataset stored in JSONL files</span>
+        ┃  ┗ 📄 raw.jsonl <span class="text-gray-300"># Metadata for all raw images</span>
+        ┃  ┗ 📄 preprocessed.jsonl <span class="text-gray-300"># Metadata for all preprocessed images</span>
+        ┃  ┗ 📄 train.jsonl <span class="text-gray-300"># Metadata on suggested train split of the dataset</span>
+        ┃  ┗ 📄 test.jsonl <span class="text-gray-300"># Metadata on suggested test split of the dataset</span>
+        ┃  ┗ 📄 validation.jsonl <span class="text-gray-300"># Metadata on suggested validation split of the dataset</span>
         ┣ 📜 LICENSE.txt <span class="text-gray-300"># CC-by-4.0 license</span>
         ┗ 📜 README.md <span class="text-gray-300"># Dataset guide, read!</span>
         </pre>
