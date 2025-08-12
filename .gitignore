@@ -174,3 +174,5 @@ cython_debug/
 .pypirc
 
 static/videos/
+.DS_Store
+**/.DS_Store
