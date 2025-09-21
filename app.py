@@ -24,6 +24,10 @@ def mission():
 def models():
     return render_template("models.html")
 
+@app.route("/guides")
+def guides():
+    return render_template("guides.html")
+
 @app.route("/avai")
 def avai():
     return render_template("avai.html")
@@ -32,9 +36,17 @@ def avai():
 def snowgan():
     return render_template("snowgan.html")
 
+@app.route("/gan_finetuning")
+def gan_finetuning():
+    return render_template("gan_finetuning.html")
+
 @app.route("/corediff")
 def corediff():
     return render_template("corediff.html")
+
+@app.route("/diffusor_finetuning")
+def diffusor_finetuning():
+    return render_template("diffusor_finetuning.html")
 
 @app.route("/datasets")
 def datasets():

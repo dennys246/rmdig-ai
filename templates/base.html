@@ -56,10 +56,25 @@
     .chalk-text {
     font-family: 'Chalkboard', 'Comic Sans MS', cursive;
     }
+
+    .btn-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: rgb(48, 5, 122);
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: color 0.3s;
+    }
+
+    .btn-link:hover {
+      color: rgb(89, 0, 255); /* text turns orange on hover */
+    }
+
   </style>
 </head>
 
-<body class="bg-gray-800 dark:bg-gray-900 min-h-screen flex flex-col">
+<body class="bg-gray-800 bg-gray-900 min-h-screen flex flex-col">
 
   <!-- Header -->
   <header class="p-4 bg-black text-white shadow">
@@ -70,6 +85,7 @@
       </a>
       <nav class="space-x-4 text-xl">
         <a href="/mission" class="chalk-text text-white hover:text-indigo-400">Mission</a>
+        <a href="/guides" class="chalk-text text-white hover:text-indigo-400">Guides</a>
         <a href="/snowpack_dataset" class="chalk-text text-white hover:text-indigo-400">Data</a>
         <a href="/models" class="chalk-text text-white hover:text-indigo-400">Models</a>
       </nav>

@@ -1,23 +1,23 @@
 
 {% extends "base.html" %}
 
-{% block title %}Models | RMD{% endblock %}
+{% block title %}Models | RMDig {% endblock %}
 
 {% block content %}
-<div class="text-center py-16 dark:bg-gray-900 dark:text-gray-100">
-  <h1 class="text-5xl font-extrabold text-gray-900 dark:text-indigo-400 leading-tight mb-4">
+<div class="text-center py-16 bg-gray-900 text-gray-100">
+  <h1 class="text-5xl font-extrabold text-gray-900 text-indigo-400 leading-tight mb-4">
     Open-source Models
     </h1><br><br>
-    <p class="text-gray-600 dark:text-gray-300 text-xl">
+    <p class="text-gray-300 text-xl">
         Apart of RMD's mission, all tools are made available to the public to validate our own work and accelerate scientific innovation through collaboration.
     </p>
     <div class="grid grid-cols-1 md:grid-cols-1 gap-6 mt-12 text-center">
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+    <div class="bg-gray-800 rounded-xl shadow-md p-6">
         <img src="{{ url_for('static', filename='img/avalanche_picture_1.jpg') }}"
             alt="Mt. Avalanche in New Zealand, credit Wikipedia"
-            class="float-left mr-6 mb-4 w-64 rounded-xl shadow-lg border-4 border-indigo-500 dark:border-indigo-400">
-            <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400"><a href="/avai" class="hover:text-indigo-600">AvAI</a></h3> 
-            <p class="text-gray-600 dark:text-gray-300">
+            class="float-left mr-6 mb-4 w-64 rounded-xl shadow-lg border-4 border-indigo-500 border-indigo-400">
+            <h3 class="text-xl font-semibold mb-2 text-indigo-700 text-indigo-400"><a href="/avai" class="text-indigo-400 hover:text-indigo-600">AvAI</a></h3> 
+            <p class="text-gray-300">
                 AvAI is a long-term project to develope an AI that transforms information within pictures 
                 of snowpack from the <a href="/snowpack_dataset"><strong class = "text-indigo-400 hover:text-indigo-600">Rocky Mountain snowpack dataset</strong></a>
                 into useful avalanche risk predictions. The <strong class = "text-indigo-400 hover:text-indigo-600">snowGAN</strong> and 
@@ -25,24 +25,24 @@
                 information from both of these models alongside weather timeseries to predict avalanche risk.
         </p>
     </div>    
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+        <div class="bg-gray-800 rounded-xl shadow-md p-6">
         <img src="{{ url_for('static', filename='img/snow_profile_synthetic_1.jpeg') }}"
             alt="Synthetic snow profile produced from the snowGAN"
-            class="float-left mr-6 mb-4 w-64 rounded-xl shadow-lg border-4 border-indigo-500 dark:border-indigo-400">
-            <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400"><a class = "text-indigo-400 hover:text-indigo-600" href = '/snowgan'>The Abominable snowGAN<a></h3> 
-            <p class="text-gray-600 dark:text-gray-300">
+            class="float-left mr-6 mb-4 w-64 rounded-xl shadow-lg border-4 border-indigo-500 border-indigo-400">
+            <h3 class="text-xl font-semibold mb-2 text-indigo-700 text-indigo-400"><a class = "text-indigo-400 hover:text-indigo-600" href = '/snowgan'>The Abominable snowGAN<a></h3> 
+            <p class="text-gray-300">
                 The <strong class = "text-indigo-400 hover:text-indigo-600"><a href="/snowgan" class="hover:text-indigo-600">snowGAN</a></strong> 
                 is a pre-trained GAN that has been trained on the magnefied profiles of snowpack images collected from
                 the <a href="/snowpack_dataset"><strong class = "text-indigo-400 hover:text-indigo-600">snowpack dataset collected</strong></a> 
                 through the mini coring methods. These models can be transfered to new more nuanced problems like wind loading or slab stability.
         </p>
     </div>
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+    <div class="bg-gray-800 rounded-xl shadow-md p-6">
     <img src="{{ url_for('static', filename='img/unstable_core_segment.png') }}"
         alt="Synthetic snow profile produced from the snowGAN"
-        class="float-left mr-6 mb-4 w-64 rounded-xl shadow-lg border-4 border-indigo-500 dark:border-indigo-400">
-        <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400"><strong class = "text-indigo-400 hover:text-indigo-600"><a href="/corediff" class="hover:text-indigo-600">coreDiff</a></h3> 
-        <p class="text-gray-600 dark:text-gray-300"> 
+        class="float-left mr-6 mb-4 w-64 rounded-xl shadow-lg border-4 border-indigo-500 border-indigo-400">
+        <h3 class="text-xl font-semibold mb-2 text-indigo-700 text-indigo-400"><strong class = "text-indigo-400 hover:text-indigo-600"><a href="/corediff" class="hover:text-indigo-600">coreDiff</a></h3> 
+        <p class="text-gray-300"> 
             The <strong class = "text-indigo-400 hover:text-indigo-600"><a href="/corediff" class="hover:text-indigo-600">coreDiff</a></strong> is a pre-trained model
             that understand features of the core samples taken apart of the <a href="/snowpack_dataset"><strong class = "text-indigo-400 hover:text-indigo-600">
             snowpack dataset collected</strong></a> through the mini coring methods. These models can be transfered to new more nuanced problems like slab stability and

@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block main_class %}Home | RMD{% endblock %}
+{% block main_class %}Home | RMDig {% endblock %}
 
 {% block content %}
 <!-- Background Image Wrapper -->
 <div class="flex flex-col justify-center bg-cover bg-center bg-no-repeat w-full" style="background-image: url('/static/img/buffalo_dillion_resevoir.JPG'); min-height: calc(100vh - 128px);">
 
-<div class="text-center py-16 px-6 dark:text-gray-100 max-w-4xl mx-auto">
+<div class="text-center py-16 px-6 text-gray-100 max-w-4xl mx-auto">
   <h1 class="text-5xl font-extrabold text-gray-800 leading-tight mb-4">
     Welcome to <span class="text-indigo-600 [text-shadow:_-1px_-1px_0_black,_1px_-1px_0_black,_-1px_1px_0_black,_1px_1px_0_black]"><br>Rocky Mountain Digerati</span>
   </h1>
@@ -17,27 +17,29 @@
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 text-center p-6">
     <div class="bg-black rounded-xl shadow-md p-6">
-      <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400">
+      <h3 class="text-xl font-semibold mb-2 text-indigo-700 text-indigo-400">
         <a href="/avai" class="hover:text-indigo-600">Apply AI to Avalanche Risk</a>
       </h3>
-      <p class="text-gray-600 dark:text-gray-400">
+      <p class="text-gray-300">
         Learn about how we're applying AI to improve avalanche risk predictions with <strong>AvAI</strong>!
       </p>
     </div>
     <div class="bg-black rounded-xl shadow-md p-6">
-      <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400">
-        <a href="/snowpack_dataset" class="hover:text-indigo-600">Rocky Mountain<br> Snowpack Dataset</a>
+      <h3 class="text-xl font-semibold mb-2 text-indigo-700 text-indigo-400">
+        <a href="/guides" class="hover:text-indigo-600">AI & Machine Learning<br>Guides</a>
       </h3>
-      <p class="text-gray-600 dark:text-gray-400">
-        Explore the <strong>unique dataset</strong> used to develop our open-source tools yourself and train your own custom AI, using our pre-trained models as a starting point!
+      <p class="text-gray-300">
+        Gain practical experience and learn about important machine learning and
+        AI concepts. In our guides we walk you through advanced AI concepts and 
+        exploring these concepts through our models and dataset.
       </p>
     </div>
     <div class="bg-black rounded-xl shadow-md p-6">
-      <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400">
-        <a href="/models" class="hover:text-indigo-600">Pre-Trained <br>Models</a>
+      <h3 class="text-xl font-semibold mb-2 text-indigo-700 text-indigo-400">
+        <a href="/snowpack_dataset" class="hover:text-indigo-600">Rocky Mountain<br> Snowpack Dataset</a>
       </h3>
-      <p class="text-gray-600 dark:text-gray-400">
-        Leverage the models we've trained to apply to your own AI projects
+      <p class="text-gray-300">
+        Explore the <strong>unique dataset</strong> used to develop our open-source tools yourself and train your own custom AI, using our pre-trained models as a starting point!
       </p>
     </div>
   </div>

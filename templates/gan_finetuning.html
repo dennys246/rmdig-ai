@@ -1,0 +1,338 @@
+{% extends "base.html" %}
+
+{% block title %}Fine-tuning | RMDig {% endblock %}
+
+{% block content %}
+
+<div class="py-16 px-4 md:px-8 max-w-6xl mx-auto bg-gray-900 text-gray-100">
+  <div>
+    <h2 class="text-4xl font-bold mb-4 text-indigo-600 text-indigo-400 text-center">Practice Fine-Tuning <br>Generative Adversarial Networks</h2>
+
+    <p class="mb-4">
+      Fine-tuning Generative Adversarial Networks (GANs) is both art and engineering. This guide walks you from the conceptual building blocks to hands-on recipes for stabilizing and improving synthesis quality.
+      We'll use the <a href="https://github.com/dennys246/snowGAN" class="font-semibold text-indigo-300 hover:text-indigo-600">snowGAN</a> and the <a href="/snowpack_dataset" class="font-semibold text-indigo-300 hover:text-indigo-600">Rocky Mountain snowpack dataset</a> as a concrete example.
+    </p><br><br>
+    
+    <nav class="mb-8">
+      <h2 class="text-xl font-bold">Table of Contents</h2>
+      <ul class="list-disc pl-6 space-y-1 text-indigo-400">
+        <li><a href="#cli" class="hover:text-indigo-600">Getting Started</a></li>
+        <li><a href="#model" class="hover:text-indigo-600">Model Structure</a></li>
+        <li><a href="#hyperparameters" class="hover:text-indigo-600">Hyperparameters (with recommended ranges)</a></li>
+        <li><a href="#practice" class="hover:text-indigo-600">Hands-On Practice</a></li>
+        <li><a href="#finetuning" class="hover:text-indigo-600">Fine-Tuning Strategies</a></li>
+        <li><a href="#metrics-monitoring" class="hover:text-indigo-600">Metrics & Monitoring</a></li>
+        <li><a href="#troubleshooting" class="hover:text-indigo-600">Troubleshooting</a></li>
+        <li><a href="#references" class="hover:text-indigo-600">Further Reading & References</a></li>
+      </ul>
+    </nav>
+
+      <!-- CLI -->
+    <section id="cli" class="mb-8">
+      <h1 class="text-indigo-300 text-2xl font-bold text-center">Getting Started</h1>
+      <div class="mt-6 space-y-4">
+        <p class="font-bold">Start by installing snowGAN, a coarsely tuned GAN ready to be fine-tuned!</p>
+        <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6 copy-container relative">
+          <button class="copy-btn absolute top-2 right-2 text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded">Copy</button>
+<pre><code>
+git clone https://github.com/dennys246/snowGAN.git
+cd snowGAN
+pip install -e .
+</code></pre>
+        </div>
+
+        <p class="font-bold">Train from scratch</p>
+        <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6 copy-container relative">
+          <button class="copy-btn absolute top-2 right-2 text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded">Copy</button>
+<pre><code>
+snowgan --mode train
+</code></pre>
+        </div>
+
+        <p class="font-bold">Explore different GAN configuration, in this example we make our generator stronger!</p>
+        <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6 copy-container relative">
+          <button class="copy-btn absolute top-2 right-2 text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded">Copy</button>
+<pre><code>
+snowgan --mode train --gen_kernel '5 5' --gen_stride '2 2' --gen_lr 0.005
+</code></pre>
+        </div>
+
+        <p class="font-bold">Generate images with your trained model</p>
+        <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6 copy-container relative">
+          <button class="copy-btn absolute top-2 right-2 text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded">Copy</button>
+<pre><code>
+snowgan --mode generate --checkpoint keras/snowgan/latest_gen.h5 --n_samples 64
+</code></pre>
+        </div>
+
+        <p class="mt-3 text-sm text-gray-600 text-gray-400">
+          Run <code>snowgan --help</code> to list every tunable hyperparameter, checkpoint flags, and data paths.
+        </p>
+      </div>
+    </section>
+
+    <!-- MODEL -->
+    <section id="model" class="mb-8">
+      <h1 class="text-indigo-300 text-2xl font-bold text-center">Model Structure</h1>
+      <div class="mt-6 space-y-4">
+        <h3 class="font-semibold">High-level view</h3>
+        <p>
+          A GAN has two networks trained adversarially: a <strong>Generator (G)</strong> that maps random noise (z) → images, and a <strong>Discriminator (D)</strong> that predicts whether samples are real or synthetic. Fine-tuning adjusts the models architecture, optimization and regularization so G and D remain balanced while improving image quality.
+        </p>
+
+        <h3 class="font-semibold">Generator (in depth)</h3>
+        <ul class="list-disc pl-6">
+          <li><strong>Input:</strong> latent vector (e.g., 100-d Gaussian).</li>
+          <li><strong>Upsampling blocks:</strong> transpose-convolutions or nearest+conv or subpixel convolution. Each block: conv → normalization → activation (ReLU/LeakyReLU) → (optional) dropout.</li>
+          <li><strong>Normalization:</strong> batchnorm, instance norm, or no norm depending on style and stability.</li>
+          <li><strong>Output:</strong> tanh or sigmoid depending on preprocessing; ensure training images match output range.</li>
+        </ul>
+
+        <h3 class="font-semibold">Discriminator (in depth)</h3>
+        <ul class="list-disc pl-6">
+          <li><strong>Input:</strong> An (x, y) resolution image, real or fake.</li>
+          <li><strong>Downsampling blocks:</strong> conv → activation → (optional) normalization. LeakyReLU is leveraged to avoid dead neurons.</li>
+          <li><strong>Final head:</strong> single scalar output for WGAN, or probability for vanilla GAN, predicting whether the image was real or fake.</li>
+          <li><strong>Spectral normalization:</strong> effective at stabilizing D — recommended as a first-line defense against exploding gradients and mode collapse.</li>
+        </ul>
+
+      </div>
+    </section>
+
+    <!-- HYPERPARAMETERS -->
+    <section id="hyperparameters" class="mb-8">
+      <h1 class="text-indigo-300 text-2xl font-bold text-center">Hyperparameters</h1>
+      <div class="mt-6 space-y-4">
+        <p class="mb-2">Below are common tunable parameters and guidance for how to change them and why.</p>
+
+        <dl class="divide-y divide-gray-300 divide-gray-700 bg-gray-50 bg-gray-800 p-4 rounded">
+          
+          <div class="grid grid-cols-4 gap-4 font-semibold text-gray-100 bg-gray-800 p-2 rounded-t">
+            <div>Hyperparameter</div>
+            <div>CLI call</div>
+            <div>Default</div>
+            <div>Description</div>
+          </div>
+
+          <div class="py-3 grid grid-cols-4 gap-4">
+            <div class="font-mono text-sm">Latent Dimension</div>
+            <div class="font-mono text-sm text-gray-300">--latent_dim</div>
+            <div class="text-gray-300">100</div>
+            <div>Higher dims can encode more detail; 64–256 typical. Increase slowly and watch mode coverage.</div>
+          </div>
+
+          <div class="py-3 grid grid-cols-4 gap-4">
+            <div class="font-mono text-sm">Generator Filters</div>
+            <div class="font-mono text-sm text-gray-300">--gen_filters</div>
+            <div class="text-gray-300">[1024,512,256,128,64]</div>
+            <div>More filters = more capacity but slower and higher memory. Cut or grow by powers of two.</div>
+          </div>
+
+          <div class="py-3 grid grid-cols-4 gap-4">
+            <div class="font-mono text-sm">Generator Kernel</div>
+            <div class="font-mono text-sm text-gray-300">--gen_kernel</div>
+            <div class="text-gray-300">[5,5]</div>
+            <div>3×3 is standard; 5×5 captures larger structures (good for texture), 7×7 only when needed.</div>
+          </div>
+
+          <div class="py-3 grid grid-cols-4 gap-4">
+            <div class="font-mono text-sm">Generator Stride</div>
+            <div class="font-mono text-sm text-gray-300">--gen_stride</div>
+            <div class="text-gray-300">[2,2]</div>
+            <div>Stride controls upsampling factor per block. If artifacts appear, prefer upsample+conv over transpose conv.</div>
+          </div>
+
+          <div class="py-3 grid grid-cols-4 gap-4">
+            <div class="font-mono text-sm">Generator Learning Rate</div>
+            <div class="font-mono text-sm text-gray-300">--gen_lr</div>
+            <div class="text-gray-300">0.001</div>
+            <div>Common ranges: 1e-4–5e-3. Use lower LR for high-capacity G to prevent destabilizing D.</div>
+          </div>
+
+          <div class="py-3 grid grid-cols-4 gap-4">
+            <div class="font-mono text-sm">Discriminator Learning Rate</div>
+            <div class="font-mono text-sm text-gray-300">--disc_lr</div>
+            <div class="text-gray-300">0.0001</div>
+            <div>Often set lower or equal to gen_lr. For WGAN-GP, 1e-4–1e-5 are common.</div>
+          </div>
+
+          <div class="py-3 grid grid-cols-4 gap-4">
+            <div class="font-mono text-sm">Adam Betas</div>
+            <div class="font-mono text-sm text-gray-300">--*_beta_1, --*_beta_2</div>
+            <div class="text-gray-300">0.5 / 0.9</div>
+            <div>Beta1=0.5 commonly used for GANs; try 0.0–0.9 if momentum hurts convergence.</div>
+          </div>
+
+          <div class="py-3 grid grid-cols-4 gap-4">
+            <div class="font-mono text-sm">Negative Slope</div>
+            <div class="font-mono text-sm text-gray-300">--*_negative_slope</div>
+            <div class="text-gray-300">0.25</div>
+            <div>LeakyReLU slope; 0.01–0.3 typical. Lower slopes more like ReLU; higher slopes give smoother gradients.</div>
+          </div>
+
+          <div class="py-3 grid grid-cols-4 gap-4">
+            <div class="font-mono text-sm">Discriminator Steps</div>
+            <div class="font-mono text-sm text-gray-300">--disc_steps</div>
+            <div class="text-gray-300">1 (or 5 for WGAN)</div>
+            <div>Increasing D steps per G update can stabilize training when D is underpowered or for WGAN-style training.</div>
+          </div>
+
+          <div class="py-3 grid grid-cols-4 gap-4">
+            <div class="font-mono text-sm">Gradient Penalty</div>
+            <div class="font-mono text-sm text-gray-300">--disc_lambda_gp</div>
+            <div class="text-gray-300">10.0</div>
+            <div>For WGAN-GP — 10 is common; reduce if gradients vanish or increase if Lipschitz constraint is loose.</div>
+          </div>
+
+        </dl>
+
+        <p class="mt-3 text-sm text-gray-600 text-gray-400">
+          <strong>Rule of thumb:</strong> change one hyperparameter at a time and run for a small number of epochs to see its direction of effect.
+        </p>
+      </div>
+    </section>
+
+    <!-- PRACTICE -->
+    <section id="practice" class="mb-8">
+      <h1 class="text-indigo-300 text-2xl font-bold text-center">Hands-On Practice</h1>
+      <div class="mt-6 space-y-4">
+        <h3 class="font-semibold">Project: snowGAN — practical recipes</h3>
+        <p>Use these stepwise recipes on the Rocky Mountain snowpack dataset.</p>
+
+        <h4 class="font-semibold">Quick sanity run (few epochs)</h4>
+        <ol class="list-decimal pl-6">
+          <li>Install & clone repository (see Getting Started above).</li>
+          <li>Run a 10–20 epoch trial to check architecture and sample pipeline learn start learning snowpack features:
+            <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-4 px-4 copy-container relative my-3">
+              <pre><code>snowgan --mode train --epochs 20 --batch_size 32 --gen_lr 0.001 --disc_lr 0.0004</code></pre>
+            </div>
+          </li>
+          <li>Inspect generated samples in <code>synthetics/</code> and logs.</li>
+        </ol>
+
+        <h4 class="font-semibold">Strengthen generator (if D too strong)</h4>
+        <ol class="list-decimal pl-6">
+          <li>Increase generator capacity slightly, or increase <code>--gen_steps</code> so G updates more per iteration.</li>
+          <li>Example:
+            <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-4 px-4 copy-container relative my-3">
+              <pre><code>snowgan --mode train --gen_filters '1024 512 256 256 128' --gen_steps 3 --gen_lr 0.002 --disc_lr 0.0001</code></pre>
+            </div>
+          </li>
+        </ol>
+
+        <h4 class="font-semibold">Transfer learning & progressive unfreeze</h4>
+        <ol class="list-decimal pl-6">
+          <li>Load pretrained generator: <code>--pretrained_gen path/to/weights.h5</code></li>
+          <li>Freeze early layers and fine-tune top layers with small LR:
+            <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-4 px-4 copy-container relative my-3">
+              <pre><code>snowgan --mode train --pretrained_gen ckpt/gen_init.h5 --freeze_gen_layers 3 --gen_lr 1e-4</code></pre>
+            </div>
+          </li>
+          <li>After stable progress, gradually unfreeze more layers and lower learning rate.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- FINETUNING -->
+    <section id="finetuning" class="mb-8">
+      <h1 class="text-indigo-300 text-2xl font-bold text-center">Fine-Tuning Strategies</h1>
+      <div class="mt-6 space-y-4">
+        <h3 class="font-semibold">Balance G & D</h3>
+        <p>
+          The primary goal when fine-tuning is to keep Generator and Discriminator balanced: if D learns too fast, G gets no signal; if G overpowers D, training mode collapses. Strategies:
+        </p>
+        <ul class="list-disc pl-6">
+          <li><strong>Adjust learning rates:</strong> reduce D LR or increase G LR when D is too strong.</li>
+          <li><strong>Update frequency:</strong> set <code>--disc_steps</code> > 1 when D is weak; lower it if D becomes too dominant.</li>
+          <li><strong>Freezing:</strong> temporarily freeze portions of D or G when transferring to a new dataset to avoid catastrophic forgetting.</li>
+        </ul>
+
+        <h3 class="font-semibold">Transfer Learning & Warm-Starts</h3>
+        <p>
+          Instead of training from scratch, initialize G (or D) from pretrained weights. Typical recipe:
+        </p>
+        <ol class="list-decimal pl-6">
+          <li>Load pretrained G, freeze early layers, train the final upsampling blocks with a low LR.</li>
+          <li>Gradually unfreeze layers (progressive unfreezing) while reducing LR.</li>
+        </ol>
+
+        <h3 class="font-semibold">Progressive growing & multi-resolution</h3>
+        <p>
+          Train at low resolution, then fine-tune at higher resolutions. This reduces instability and speeds early learning.
+        </p>
+
+        <h3 class="font-semibold">Regularization tricks</h3>
+        <ul class="list-disc pl-6">
+          <li>Spectral normalization (favored for D).</li>
+          <li>Gradient penalty (for WGAN-GP).</li>
+          <li>Label smoothing / noisy labels for discriminator.</li>
+          <li>Dropout in D to reduce overfitting to training data.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- METRICS -->
+    <section id="metrics-monitoring" class="mb-8">
+      <h1 class="text-indigo-300 text-2xl font-bold text-center">Metrics & Monitoring</h1>
+      <div class="mt-6 space-y-4">
+        <p>
+          Always visualize generated samples regularly, after each checkpoint synthetic images will be generated
+          and saved to showcase the current state of the training. Pay attention to:
+        </p>
+        <ul class="list-disc pl-6">
+          <li>Artifact patterns (checkerboard from transpose conv, ringing from large kernels).</li>
+          <li>Mode collapse (many identical outputs).</li>
+          <li>Texture realism vs structure fidelity.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TROUBLESHOOTING -->
+    <section id="troubleshooting" class="mb-8">
+      <h1 class="text-indigo-300 text-2xl font-bold text-center">Troubleshooting & Common Failure Modes</h1>
+      <div class="mt-6 space-y-4">
+        <h3 class="font-semibold">Mode collapse</h3>
+        <p>
+          Symptoms: G produces low diversity outputs. Fixes:
+        </p>
+        <ul class="list-disc pl-6">
+          <li>Decrease generator LR or increase discriminator capacity/steps.</li>
+          <li>Add minibatch discrimination or feature matching losses.</li>
+          <li>Increase latent dimension or add noise to D inputs.</li>
+        </ul>
+
+        <h3 class="font-semibold">Unstable training / exploding losses</h3>
+        <p>
+          Fixes:
+        </p>
+        <ul class="list-disc pl-6">
+          <li>Use gradient penalty or spectral normalization.</li>
+          <li>Clip gradients, reduce LR, or switch optimizers.</li>
+          <li>Use smaller batch sizes if memory allows (reduces gradient variance).</li>
+        </ul>
+
+        <h3 class="font-semibold">Artifacts (checkerboard, gridlines)</h3>
+        <p>Replace transpose convolutions with upsample+conv and use kernel sizes consistent with stride.</p>
+      </div>
+    </section>
+
+    <!-- REFERENCES -->
+    <section id="references" class="mb-12">
+      <h1 class="text-indigo-300 text-2xl font-bold text-center">Further Reading & References</h1>
+      <div class="mt-6 space-y-3 text-sm">
+        <p class="text-gray-700 text-gray-300">
+          This guide condenses widely used practical strategies. If you want to dive deeper, search for:
+        </p>
+        <ul class="list-disc pl-6">
+          <li>Original GAN paper (Goodfellow et al.)</li>
+          <li>WGAN and WGAN-GP (Arjovsky et al., Gulrajani et al.)</li>
+          <li>Spectral Normalization for GANs</li>
+          <li>Progressive Growing of GANs</li>
+          <li>FID / Inception Score evaluation methodology</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+
+{% extends "base.html" %}
+
+{% block title %}Guides | RMDig {% endblock %}
+
+{% block content %}
+<div class="text-center py-16 bg-gray-900 text-gray-100">
+  <h1 class="text-5xl font-extrabold text-indigo-300 leading-tight mb-4">
+    AI & Machine Learning Guides
+    </h1><br><br>
+    <p class="text-gray-300 text-xl">
+        Check below for different hands-on guides exploring important 
+        topics of machine learning and artificial intelligence. 
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-1 gap-6 mt-12 text-center">
+    <div class="bg-gray-800 rounded-xl shadow-md p-6">
+        <img src="{{ url_for('static', filename='img/scary_snowgan.png') }}"
+            alt="An image generated from the snowGAN using an abnormally large kernel size"
+            class="float-left mr-6 mb-4 w-64 rounded-xl shadow-lg border-4 border-indigo-500 border-indigo-400">
+            <h3 class="text-xl font-semibold mb-2 text-indigo-700 text-indigo-400"><a href="/gan_finetuning" class="text-indigo-400 hover:text-indigo-600">Practice Fine-Tuning GANs</a></h3> 
+            <p class="text-gray-300">
+                Explore fine-tuning generative adversarial networks (GANs) with the snowGAN!
+                Fine-tuning GANs can be tricky due to the delicate balancing act between generator,
+                tasked with generated synthetic images, and discriminator, attempting to distinguish
+                real from fake. In this guide we share the lesson's we've learned training our snowGAN.
+        </p>
+    </div>
+        <div class="bg-gray-800 rounded-xl shadow-md p-6">
+        <img src="{{ url_for('static', filename='img/corediff_synth_1.png') }}"
+            alt="Synthetic snow profile produced from the snowGAN"
+            class="float-left mr-6 mb-4 w-64 rounded-xl shadow-lg border-4 border-indigo-500 border-indigo-400">
+            <h3 class="text-xl fo
+            nt-semibold mb-2 text-indigo-700 text-indigo-400"><a class = "font-semibold text-indigo-400 hover:text-indigo-600" href = '/diffusor_finetuning'>Practice Fine-Tuning Diffusors<a></h3> 
+            <p class="text-gray-300">
+                Practice fine-tuning a diffusor with the coreDiffuor! Within this guide you'll learn about
+                the unique temporal encoding of noise that makes the diffusor architecture so powerful. 
+                Alongside this, 
+        </p>
+    </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,22 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}Datasets | RMD{% endblock %}
+{% block title %}Datasets | RMDig {% endblock %}
 
 {% block content %}
-<div class="text-center py-16 dark:bg-gray-900 dark:text-gray-100">
-  <h1 class="text-5xl font-extrabold text-gray-900 dark:text-indigo-400 leading-tight mb-4">
-    Open-source Datasets<span class="text-indigo-600 dark:text-indigo-400"></span>
+<div class="text-center py-16 bg-gray-900 text-gray-100">
+  <h1 class="text-5xl font-extrabold text-gray-900 text-indigo-400 leading-tight mb-4">
+    Open-source Datasets<span class="text-indigo-600 text-indigo-400"></span>
     </h1><br><br>
-    <p class="text-gray-600 dark:text-gray-300 text-xl">
+    <p class="text-gray-600 text-gray-300 text-xl">
         Apart of RMD's mission, all data is made available to the public after publication to validate our own work and accelerate scientific innovation through collaboration.
     </p>
     <div class="grid grid-cols-1 md:grid-cols-1 gap-6 mt-12 text-center">
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+        <div class="bg-white bg-gray-800 rounded-xl shadow-md p-6">
             <img src="{{ url_for('static', filename='img/snow_profile_2.jpeg') }}"
                 alt="Denny Schaedig Sampling Snow"
-                class="float-left mr-6 mb-4 w-64 rounded-xl shadow-lg border-4 border-indigo-500 dark:border-indigo-400">
-            <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400"><a href="/snowpack_dataset"><strong class = "text-indigo-400 hover:text-indigo-600">Snowpack Dataset</strong></a></h3> 
-            <p class="text-gray-600 dark:text-gray-300">
+                class="float-left mr-6 mb-4 w-64 rounded-xl shadow-lg border-4 border-indigo-500 border-indigo-400">
+            <h3 class="text-xl font-semibold mb-2 text-indigo-700 text-indigo-400"><a href="/snowpack_dataset"><strong class = "text-indigo-400 hover:text-indigo-600">Snowpack Dataset</strong></a></h3> 
+            <p class="text-gray-600 text-gray-300">
                 The <strong class = "text-indigo-400">snowpack dataset</strong></a> was collected by Denny Schaedig through an experimental mini-coring method
                 developed for the purpose of applying computer vision to avalanche risk assessment. The dataset 
                 contains 3,000 samples collected during the 2024 - 2025 Winter season in the Rocky Mountains of Colorado.
