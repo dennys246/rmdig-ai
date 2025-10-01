@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Fine-tuning | RMDig {% endblock %}
+{% block title %}Fine-tuning | Diffusors {% endblock %}
 
 {% block content %}
 
@@ -198,8 +198,7 @@ corediff --mode generate --checkpoint keras/corediffusor/diffusor.keras --n_samp
 
         <h4 class="font-semibold">Transfer learning & progressive unfreeze</h4>
         <ol class="list-decimal pl-6">
-          <li>Load pretrained checkpoint: <code>--pretrained path/to/weights.pt</code></li>
-          <li>Freeze early layers and fine-tune top layers with small LR:
+          <li>Load pretrained checkpoint: <code>--checkpoint keras/corediffusor/diffusor.keras</code></li>
             <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-4 px-4 copy-container relative my-3">
               <pre><code>corediff --mode train --checkpoint keras/corediffusor/diffusor.keras --lr 5e-5</code></pre>
             </div>
