@@ -65,7 +65,7 @@ corediff --mode train --unet_depth 4 --lr 5e-4
         <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6 copy-container relative">
           <button class="copy-btn absolute top-2 right-2 text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded">Copy</button>
 <pre><code>
-corediff --mode sample --checkpoint ckpts/latest.pt --steps 50 --guidance_scale 7.5 --n_samples 64
+corediff --mode generate --checkpoint keras/corediffusor/diffusor.keras --n_samples 64
 </code></pre>
         </div>
 
@@ -201,7 +201,7 @@ corediff --mode sample --checkpoint ckpts/latest.pt --steps 50 --guidance_scale 
           <li>Load pretrained checkpoint: <code>--pretrained path/to/weights.pt</code></li>
           <li>Freeze early layers and fine-tune top layers with small LR:
             <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-4 px-4 copy-container relative my-3">
-              <pre><code>corediff --mode train --pretrained ckpts/base.pt --freeze_layers 3 --lr 5e-5</code></pre>
+              <pre><code>corediff --mode train --checkpoint keras/corediffusor/diffusor.keras --lr 5e-5</code></pre>
             </div>
           </li>
           <li>After stable progress, gradually unfreeze more layers and lower LR.</li>
@@ -236,40 +236,6 @@ corediff --mode sample --checkpoint ckpts/latest.pt --steps 50 --guidance_scale 
           <li>Noise augmentation of inputs.</li>
           <li>Smaller guidance scale to avoid overfitting prompts.</li>
         </ul>
-      </div>
-    </section>
-
-    <!-- METRICS -->
-    <section id="metrics-monitoring" class="mb-8">
-      <h1 class="text-indigo-300 text-2xl font-bold text-center">Metrics & Monitoring</h1>
-      <div class="mt-6 space-y-4">
-        <p>Always visualize generated samples after checkpoints and watch for:</p>
-        <ul class="list-disc pl-6">
-          <li>Blurriness (too few sampling steps or unstable LR).</li>
-          <li>Over-sharp / over-saturated (guidance scale too high).</li>
-          <li>Mode collapse (rare, but may occur with poor conditioning).</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- TROUBLESHOOTING -->
-    <section id="troubleshooting" class="mb-8">
-      <h1 class="text-indigo-300 text-2xl font-bold text-center">Troubleshooting & Common Failure Modes</h1>
-      <div class="mt-6 space-y-4">
-        <h3 class="font-semibold">Noisy or blurry outputs</h3>
-        <ul class="list-disc pl-6">
-          <li>Increase sampling steps.</li>
-          <li>Lower learning rate or train longer.</li>
-        </ul>
-
-        <h3 class="font-semibold">Training diverges</h3>
-        <ul class="list-disc pl-6">
-          <li>Check LR, use gradient clipping.</li>
-          <li>Reduce batch size if gradients explode.</li>
-        </ul>
-
-        <h3 class="font-semibold">Poor conditioning</h3>
-        <p>Lower guidance scale or improve conditioning embeddings (text encoders, class labels).</p>
       </div>
     </section>
 
