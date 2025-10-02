@@ -226,7 +226,7 @@ snowgan --mode generate --checkpoint keras/snowgan/latest_gen.h5 --n_samples 64
 
         <h4 class="font-semibold">Transfer learning</h4>
         <ol class="list-disc pl-6">
-          <li>Load pretrained generator <code>--checkpoint keras/snowgan/generator.keras</code></li>
+          <li>Load pretrained generator <code>--gen_checkpoint (or --disc_checkpoint) keras/snowgan/generator.keras</code></li>
             <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-4 px-4 copy-container relative my-3">
               <pre><code>snowgan --mode train --gen_checkpoint keras/snowgan/generator.keras --gen_lr 1e-4</code></pre>
             </div>
