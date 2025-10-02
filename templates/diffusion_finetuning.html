@@ -65,7 +65,7 @@ corediff --mode train --unet_depth 4 --lr 5e-4
         <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6 copy-container relative">
           <button class="copy-btn absolute top-2 right-2 text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded">Copy</button>
 <pre><code>
-corediff --mode generate --checkpoint keras/corediffusor/diffusor.keras --n_samples 64
+corediff --mode generate --checkpoint keras/corediff/diffusion.keras --n_samples 64
 </code></pre>
         </div>
 
@@ -198,9 +198,9 @@ corediff --mode generate --checkpoint keras/corediffusor/diffusor.keras --n_samp
 
         <h4 class="font-semibold">Transfer learning & progressive unfreeze</h4>
         <ol class="list-decimal pl-6">
-          <li>Load pretrained checkpoint: <code>--checkpoint keras/corediffusor/diffusor.keras</code></li>
+          <li>Load pretrained checkpoint: <code>--checkpoint keras/corediff/diffusion.keras</code></li>
             <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-4 px-4 copy-container relative my-3">
-              <pre><code>corediff --mode train --checkpoint keras/corediffusor/diffusor.keras --lr 5e-5</code></pre>
+              <pre><code>corediff --mode train --checkpoint keras/corediff/diffusion.keras --lr 5e-5</code></pre>
             </div>
           </li>
           <li>After stable progress, gradually unfreeze more layers and lower LR.</li>

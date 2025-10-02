@@ -44,9 +44,9 @@ def gan_finetuning():
 def corediff():
     return render_template("corediff.html")
 
-@app.route("/diffusor_finetuning")
-def diffusor_finetuning():
-    return render_template("diffusor_finetuning.html")
+@app.route("/diffusion_finetuning")
+def diffusion_finetuning():
+    return render_template("diffusion_finetuning.html")
 
 @app.route("/datasets")
 def datasets():
