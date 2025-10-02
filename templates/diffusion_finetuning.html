@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Fine-tuning | Diffusors {% endblock %}
+{% block title %}Fine-tuning | Diffusion {% endblock %}
 
 {% block content %}
 
@@ -13,7 +13,7 @@
     <p class="mb-4">
       Fine-tuning Diffusion Models is both science and craftsmanship. This guide walks you from the conceptual
       building blocks to hands-on recipes for stabilizing and improving synthesis quality.
-      We'll use the <a href="https://github.com/dennys246/coreDiffusor" class="font-semibold text-indigo-300 hover:text-indigo-600">coreDiffusor</a>
+      We'll use the <a href="https://github.com/dennys246/coreDiff" class="font-semibold text-indigo-300 hover:text-indigo-600">coreDiff</a>
       and the <a href="/snowpack_dataset" class="font-semibold text-indigo-300 hover:text-indigo-600">Rocky Mountain snowpack dataset</a> as a concrete example.
     </p><br><br>
     
@@ -35,12 +35,12 @@
     <section id="cli" class="mb-8">
       <h1 class="text-indigo-300 text-2xl font-bold text-center">Getting Started</h1>
       <div class="mt-6 space-y-4">
-        <p class="font-bold">Start by installing coreDiffusor, a diffusion backbone ready to be fine-tuned!</p>
+        <p class="font-bold">Start by installing coreDiff, a diffusion backbone ready to be fine-tuned!</p>
         <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-6 px-6 copy-container relative">
           <button class="copy-btn absolute top-2 right-2 text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded">Copy</button>
 <pre><code>
-git clone https://github.com/dennys246/coreDiffusor.git
-cd coreDiffusor
+git clone https://github.com/dennys246/coreDiff.git
+cd coreDiff
 pip install -e .
 </code></pre>
         </div>
@@ -103,110 +103,164 @@ corediff --mode generate --checkpoint keras/corediff/diffusion.keras --n_samples
       </div>
     </section>
 
-    <!-- HYPERPARAMETERS -->
-    <section id="hyperparameters" class="mb-8">
-      <h1 class="text-indigo-300 text-2xl font-bold text-center">Hyperparameters</h1>
-      <div class="mt-6 space-y-4">
-        <p class="mb-2">Below are common tunable parameters and guidance for how to change them and why.</p>
+<!-- HYPERPARAMETERS -->
+<section id="hyperparameters" class="mb-8">
+  <h1 class="text-indigo-300 text-2xl font-bold text-center">Hyperparameters</h1>
+  <div class="mt-6 space-y-4">
+    <p class="mb-2">Below are common tunable parameters and guidance for how to change them and why.</p>
 
-        <dl class="divide-y divide-gray-700 bg-gray-800 p-4 rounded">
-          
-          <div class="grid grid-cols-4 gap-4 font-semibold text-gray-100 bg-gray-800 p-2 rounded-t">
-            <div>Hyperparameter</div>
-            <div>CLI call</div>
-            <div>Default</div>
-            <div>Description</div>
-          </div>
+    <dl class="divide-y divide-gray-700 bg-gray-800 p-4 rounded">
 
-          <div class="py-3 grid grid-cols-4 gap-4">
-            <div class="font-mono text-sm">Learning Rate</div>
-            <div class="font-mono text-sm text-gray-300">--lr</div>
-            <div class="text-gray-300">1e-4</div>
-            <div>Typical range 1e-5–1e-4. Lower for larger datasets, higher for fast adaptation.</div>
-          </div>
-
-          <div class="py-3 grid grid-cols-4 gap-4">
-            <div class="font-mono text-sm">Batch Size</div>
-            <div class="font-mono text-sm text-gray-300">--batch_size</div>
-            <div class="text-gray-300">32</div>
-            <div>Larger batches stabilize gradients but require more memory. Scale LR accordingly.</div>
-          </div>
-
-          <div class="py-3 grid grid-cols-4 gap-4">
-            <div class="font-mono text-sm">U-Net Depth</div>
-            <div class="font-mono text-sm text-gray-300">--unet_depth</div>
-            <div class="text-gray-300">3</div>
-            <div>Controls number of down/upsampling stages. More depth → higher capacity, slower training.</div>
-          </div>
-
-          <div class="py-3 grid grid-cols-4 gap-4">
-            <div class="font-mono text-sm">Timesteps</div>
-            <div class="font-mono text-sm text-gray-300">--timesteps</div>
-            <div class="text-gray-300">1000</div>
-            <div>Number of diffusion steps during training. Higher → smoother denoising, but slower sampling.</div>
-          </div>
-
-          <div class="py-3 grid grid-cols-4 gap-4">
-            <div class="font-mono text-sm">Sampling Steps</div>
-            <div class="font-mono text-sm text-gray-300">--steps</div>
-            <div class="text-gray-300">50</div>
-            <div>Steps used at inference. Fewer steps = faster but blurrier outputs. Common: 20–100.</div>
-          </div>
-
-          <div class="py-3 grid grid-cols-4 gap-4">
-            <div class="font-mono text-sm">Guidance Scale</div>
-            <div class="font-mono text-sm text-gray-300">--guidance_scale</div>
-            <div class="text-gray-300">7.5</div>
-            <div>Higher values strengthen conditioning (e.g., prompts) but can reduce diversity.</div>
-          </div>
-
-        </dl>
-
-        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">
-          <strong>Rule of thumb:</strong> change one hyperparameter at a time and run for a small number of epochs to see its effect.
-        </p>
+      <div class="grid grid-cols-4 gap-4 font-semibold text-gray-100 bg-gray-800 p-2 rounded-t">
+        <div>Hyperparameter</div>
+        <div>CLI call</div>
+        <div>Default</div>
+        <div>Description</div>
       </div>
-    </section>
 
-    <!-- PRACTICE -->
-    <section id="practice" class="mb-8">
-      <h1 class="text-indigo-300 text-2xl font-bold text-center">Hands-On Practice</h1>
-      <div class="mt-6 space-y-4">
-        <h3 class="font-semibold">Project: coreDiffusor — practical recipes</h3>
-        <p>Use these stepwise recipes on the Rocky Mountain snowpack dataset.</p>
-
-        <h4 class="font-semibold">Quick sanity run (few epochs)</h4>
-        <ol class="list-decimal pl-6">
-          <li>Install & clone repository (see Getting Started above).</li>
-          <li>Run a 10–20 epoch trial to check pipeline and confirm denoising:
-            <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-4 px-4 copy-container relative my-3">
-              <pre><code>corediff --mode train --epochs 20 --batch_size 32 --lr 1e-4</code></pre>
-            </div>
-          </li>
-          <li>Inspect generated samples in <code>synthetics/</code> and logs.</li>
-        </ol>
-
-        <h4 class="font-semibold">Faster convergence with fewer timesteps</h4>
-        <ol class="list-decimal pl-6">
-          <li>Try reducing training timesteps while keeping inference steps high.</li>
-          <li>Example:
-            <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-4 px-4 copy-container relative my-3">
-              <pre><code>corediff --mode train --timesteps 500 --steps 50</code></pre>
-            </div>
-          </li>
-        </ol>
-
-        <h4 class="font-semibold">Transfer learning & progressive unfreeze</h4>
-        <ol class="list-decimal pl-6">
-          <li>Load pretrained checkpoint: <code>--checkpoint keras/corediff/diffusion.keras</code></li>
-            <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-4 px-4 copy-container relative my-3">
-              <pre><code>corediff --mode train --checkpoint keras/corediff/diffusion.keras --lr 5e-5</code></pre>
-            </div>
-          </li>
-          <li>After stable progress, gradually unfreeze more layers and lower LR.</li>
-        </ol>
+      <!-- Model input/output -->
+      <div class="py-3 grid grid-cols-4 gap-4">
+        <div class="font-mono text-sm">Resolution</div>
+        <div class="font-mono text-sm text-gray-300">--resolution</div>
+        <div class="text-gray-300">50 100</div>
+        <div>Downsample images to this resolution (HxW). Smaller = faster, larger = more detail.</div>
       </div>
-    </section>
+
+      <div class="py-3 grid grid-cols-4 gap-4">
+        <div class="font-mono text-sm">Synthetic Samples</div>
+        <div class="font-mono text-sm text-gray-300">--n_samples</div>
+        <div class="text-gray-300">10</div>
+        <div>How many images to generate in a batch of inference.</div>
+      </div>
+
+      <div class="py-3 grid grid-cols-4 gap-4">
+        <div class="font-mono text-sm">Batch Size</div>
+        <div class="font-mono text-sm text-gray-300">--batch_size</div>
+        <div class="text-gray-300">8</div>
+        <div>Larger batches stabilize gradients but require more memory. Adjust LR accordingly.</div>
+      </div>
+
+      <div class="py-3 grid grid-cols-4 gap-4">
+        <div class="font-mono text-sm">Epochs</div>
+        <div class="font-mono text-sm text-gray-300">--epochs</div>
+        <div class="text-gray-300">10</div>
+        <div>Number of full passes through the dataset during training.</div>
+      </div>
+
+      <div class="py-3 grid grid-cols-4 gap-4">
+        <div class="font-mono text-sm">Latent Dim (T)</div>
+        <div class="font-mono text-sm text-gray-300">--T</div>
+        <div class="text-gray-300">1000</div>
+        <div>Dimensionality of the latent space used in diffusion.</div>
+      </div>
+
+      <!-- Conv params -->
+      <div class="py-3 grid grid-cols-4 gap-4">
+        <div class="font-mono text-sm">Kernel Size</div>
+        <div class="font-mono text-sm text-gray-300">--kernel_size</div>
+        <div class="text-gray-300">4 4</div>
+        <div>Size of convolutional kernels. Larger kernels capture more context.</div>
+      </div>
+
+      <div class="py-3 grid grid-cols-4 gap-4">
+        <div class="font-mono text-sm">Kernel Stride</div>
+        <div class="font-mono text-sm text-gray-300">--kernel_stride</div>
+        <div class="text-gray-300">2 2</div>
+        <div>Stride of convolutional kernels. Larger stride = more downsampling.</div>
+      </div>
+
+      <div class="py-3 grid grid-cols-4 gap-4">
+        <div class="font-mono text-sm">Learning Rate</div>
+        <div class="font-mono text-sm text-gray-300">--learning_rate</div>
+        <div class="text-gray-300">0.001</div>
+        <div>Optimizer learning rate. Lower for stability, higher for fast adaptation.</div>
+      </div>
+
+      <!-- Diffusion params -->
+      <div class="py-3 grid grid-cols-4 gap-4">
+        <div class="font-mono text-sm">Beta Low</div>
+        <div class="font-mono text-sm text-gray-300">--beta_low</div>
+        <div class="text-gray-300">1e-5</div>
+        <div>Lower bound of diffusion beta schedule. Controls noise scale at start.</div>
+      </div>
+
+      <div class="py-3 grid grid-cols-4 gap-4">
+        <div class="font-mono text-sm">Beta High</div>
+        <div class="font-mono text-sm text-gray-300">--beta_high</div>
+        <div class="text-gray-300">0.02</div>
+        <div>Upper bound of diffusion beta schedule. Higher = more aggressive noise at end.</div>
+      </div>
+
+      <div class="py-3 grid grid-cols-4 gap-4">
+        <div class="font-mono text-sm">LeakyReLU Slope</div>
+        <div class="font-mono text-sm text-gray-300">--negative_slope</div>
+        <div class="text-gray-300">0.25</div>
+        <div>Slope for negative inputs in LeakyReLU activations. Controls nonlinearity.</div>
+      </div>
+
+      <!-- Architecture params -->
+      <div class="py-3 grid grid-cols-4 gap-4">
+        <div class="font-mono text-sm">Encoder Channels</div>
+        <div class="font-mono text-sm text-gray-300">--enc_chs</div>
+        <div class="text-gray-300">[64, 128, 256, 512]</div>
+        <div>Number of filters per encoder layer (comma-separated). Defines model capacity.</div>
+      </div>
+
+      <div class="py-3 grid grid-cols-4 gap-4">
+        <div class="font-mono text-sm">Decoder Channels</div>
+        <div class="font-mono text-sm text-gray-300">--dec_chs</div>
+        <div class="text-gray-300">[512, 256, 128, 64]</div>
+        <div>Number of filters per decoder layer (comma-separated). Should mirror encoder.</div>
+      </div>
+
+    </dl>
+
+    <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">
+      <strong>Rule of thumb:</strong> change one hyperparameter at a time and run for a small number of epochs to see its effect.
+    </p>
+  </div>
+</section>
+
+<!-- PRACTICE -->
+<section id="practice" class="mb-8">
+  <h1 class="text-indigo-300 text-2xl font-bold text-center">Hands-On Practice</h1>
+  <div class="mt-6 space-y-4">
+    <h3 class="font-semibold">Project: coreDiff — practical recipes</h3>
+    <p>Use these stepwise recipes on the Rocky Mountain snowpack dataset.</p>
+
+    <h4 class="font-semibold">Quick sanity run (few epochs)</h4>
+    <ol class="list-decimal pl-6">
+      <li>Install & clone repository (see Getting Started above).</li>
+      <li>Run a 10–20 epoch trial to check pipeline and confirm denoising:
+        <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-4 px-4 copy-container relative my-3">
+          <pre><code>corediff --mode train --epochs 20 --batch_size 8 --learning_rate 0.001</code></pre>
+        </div>
+      </li>
+      <li>Inspect generated samples in <code>synthetics/</code> and logs.</li>
+    </ol>
+
+    <h4 class="font-semibold">Experimenting with resolution & samples</h4>
+    <ol class="list-decimal pl-6">
+      <li>Try adjusting the input resolution to balance speed vs. fidelity.</li>
+      <li>Generate more synthetic samples per run for evaluation.</li>
+      <li>Example:
+        <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-4 px-4 copy-container relative my-3">
+          <pre><code>corediff --mode train --resolution 64 64 --n_samples 20</code></pre>
+        </div>
+      </li>
+    </ol>
+
+    <h4 class="font-semibold">Transfer learning & fine-tuning</h4>
+    <ol class="list-decimal pl-6">
+      <li>Load pretrained checkpoint: <code>--checkpoint keras/corediff/diffusion.keras</code></li>
+        <div class="w-full bg-black text-white text-sm font-mono overflow-x-auto py-4 px-4 copy-container relative my-3">
+          <pre><code>corediff --mode train --checkpoint keras/corediff/diffusion.keras --learning_rate 5e-4</code></pre>
+        </div>
+      </li>
+      <li>After stable progress, lower LR further or adjust encoder/decoder channels with <code>--enc_chs</code> and <code>--dec_chs</code>.</li>
+    </ol>
+  </div>
+</section>
 
     <!-- FINETUNING -->
     <section id="finetuning" class="mb-8">
