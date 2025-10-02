@@ -54,7 +54,7 @@
     }
 
     .chalk-text {
-    font-family: 'Chalkboard', 'Comic Sans MS', cursive;
+      font-family: "Comic Sans MS", "Comic Sans", cursive;
     }
 
     .btn-link {
@@ -77,20 +77,20 @@
 <body class="bg-gray-800 bg-gray-900 min-h-screen flex flex-col">
 
   <!-- Header -->
-  <header class="p-4 bg-black text-white shadow">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
-      <a href="/" class="logo-wrapper">
-        <img src="/static/img/rmdig_logo_black.png" alt="RMDig Logo" class="logo-default" />
-        <img src="/static/img/rmdig_logo_indigo.png" alt="RMDig Hover Logo" class="logo-hover" />
-      </a>
-      <nav class="space-x-4 text-xl">
-        <a href="/mission" class="chalk-text text-white hover:text-indigo-400">Mission</a>
-        <a href="/guides" class="chalk-text text-white hover:text-indigo-400">Guides</a>
-        <a href="/snowpack_dataset" class="chalk-text text-white hover:text-indigo-400">Data</a>
-        <a href="/models" class="chalk-text text-white hover:text-indigo-400">Models</a>
-      </nav>
-    </div>
-  </header>
+<header class="p-4 bg-black text-white shadow">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center">
+    <a href="/" class="logo-wrapper mb-4 md:mb-0">
+      <img src="/static/img/rmdig_logo_black.png" alt="RMDig Logo" class="logo-default" />
+      <img src="/static/img/rmdig_logo_indigo.png" alt="RMDig Hover Logo" class="logo-hover" />
+    </a>
+    <nav class="flex flex-col md:flex-row md:space-x-4 text-xl space-y-2 md:space-y-0">
+      <a href="/mission" class="chalk-text text-white hover:text-indigo-400">Mission</a>
+      <a href="/guides" class="chalk-text text-white hover:text-indigo-400">Guides</a>
+      <a href="/snowpack_dataset" class="chalk-text text-white hover:text-indigo-400">Data</a>
+      <a href="/models" class="chalk-text text-white hover:text-indigo-400">Models</a>
+    </nav>
+  </div>
+</header>
 
   <!-- Main content -->
   <main class="{% block main_class %}max-w-4xl mx-auto p-6 mt-6 bg-blue rounded-2xl shadow-md{% endblock %} flex-grow">
@@ -121,12 +121,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   <!-- Footer -->
   <footer class="bg-black mt-auto">
-    <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
-      <p>&copy; 2025 Rocky Mountain Digerati, LLC. All rights reserved.</p>
-      <div class="flex gap-4 mt-2 md:mt-0">
+    <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm text-center md:text-left">
+      
+      <!-- Left -->
+      <p class="mb-2 md:mb-0">&copy; 2025 Rocky Mountain Digerati, LLC. All rights reserved.</p>
+      
+      <!-- Right -->
+      <div class="flex flex-col md:flex-row gap-2 md:gap-4">
         <a href="/contact" class="hover:text-indigo-500">Contact Us</a>
         <a href="/about" class="hover:text-indigo-500">About RMDig</a>
       </div>
+      
     </div>
   </footer>
 
