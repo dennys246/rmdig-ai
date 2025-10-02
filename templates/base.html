@@ -97,6 +97,28 @@
     {% block content %}{% endblock %}
   </main>
 
+  {% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.copy-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const code = button.parentElement.querySelector('code').textContent.trim();
+            navigator.clipboard.writeText(code)
+                .then(() => {
+                    button.innerText = 'Copied!';
+                    setTimeout(() => button.innerText = 'Copy', 1500);
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    button.innerText = 'Failed';
+                    setTimeout(() => button.innerText = 'Copy', 1500);
+                });
+        });
+    });
+});
+</script>
+{% endblock %}
+
   <!-- Footer -->
   <footer class="bg-black mt-auto">
     <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
