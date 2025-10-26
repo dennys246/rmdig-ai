@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Sign Up | RMDig{% endblock %}
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert alert-success">
+      {{ messages[0] }}
+    </div>
+  {% endif %}
+{% endwith %}
+<div class="max-w-6xl mx-auto mt-10 px-4 md:px-8 py-10">
+  <form action="{{ url_for('upload_json') }}" method="POST" enctype="multipart/form-data" class="theme-surface-strong max-w-xl mx-auto p-8 rounded-2xl shadow-lg space-y-6">
+    <h2 class="text-2xl font-semibold text-center text-indigo-700 dark:text-indigo-300">Join the Project!</h2>
+    <p class="text-gray-700 dark:text-gray-200 leading-relaxed">
+    Join RMDig this season collecting data to train an AI to save lives.
+    </p>
+      <br>
+    <div class="mb-4">
+      <div>
+        <label for="name" class="block text-xl text-center font-medium text-gray-700 dark:text-gray-300 mb-1">Your Name</label>
+        <p id="study-description" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Enter your name
+        </p>
+        <input type="text" name="name" id="name" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+
+      </div>
+      <br>
+      <div>
+        <label for="email" class="block text-xl text-center font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+        <p id="study-description" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Enter an email address to contact you at.
+        </p>
+        <input type="text" name="email" id="email" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <br>
+      <div>
+        <label for="phone" class="block text-xl text-center font-medium text-gray-700 dark:text-gray-300 mb-1">Phone Number</label>
+        <p id="study-description" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Enter a phone number to contact you at.
+        </p>
+        <input type="text" name="phone" id="phone" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <br>
+      <div>
+        <label for="city" class="block text-xl text-center font-medium text-gray-700 dark:text-gray-300 mb-1">City</label>
+        <p id="study-description" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Enter the city where you are based.
+        </p>
+        <input type="text" name="city" id="city" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <br>
+      <div>
+        <label for="state" class="block text-xl text-center font-medium text-gray-700 dark:text-gray-300 mb-1">State</label>
+        <p id="study-description" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Enter the state where you are based.
+        </p>
+        <input type="text" name="state" id="state" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <br>
+      <div id = "backcountry_equipment">
+        <label for="backcountry_equipment" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        Have you backcountry skied and do you have the following backcountry equipment? Shovel, probe, skis/snowboard and skins.
+        </label>
+        <select name="backcountry_equipment" id="backcountry_equipment" required
+                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+          <option value="">Select...</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <br>
+      <div>
+        <label for="data_experience" class="block text-xl text-center font-medium text-gray-700 dark:text-gray-300 mb-1">State</label>
+        <p id="study-description" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          What backcountry experience do you have?
+        </p>
+        <input type="text" name="data_experience" id="data_experience" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <br>
+      <div>
+        <label for="state" class="block text-xl text-center font-medium text-gray-700 dark:text-gray-300 mb-1">State</label>
+        <p id="study-description" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Do you have any experience with data or analysis?
+        </p>
+        <input type="text" name="state" id="state" required
+               class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <br>
+  </form>
+</div>
+
+
+{% endblock %}
