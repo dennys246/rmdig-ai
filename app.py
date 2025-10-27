@@ -5,9 +5,8 @@ from datetime import datetime, timezone
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
-API_KEY = os.environ.get("HRFUNC_API_KEY")
+API_KEY = os.environ.get("RMDIG_API_KEY")
 app.secret_key = os.environ.get("SECRET_KEY")
-UPLOAD_FOLDER = "/mnt/public/hrfunc/uploads"
 TIMESTAMP_SUFFIX_FORMAT = "%Y-%m-%d_%H-%M-%S"
 
 
@@ -27,69 +26,21 @@ def send_confirmation_email(recipient, submission_metadata):
         return
 
     msg = EmailMessage()
-    msg["Subject"] = "HRF Submission Received"
+    msg["Subject"] = "RMDigger Signup Confirmation"
     msg["From"] = from_email
     msg["To"] = recipient
 
-    subset_value = (submission_metadata.get("dataset_subset") or "").strip().lower()
-    if subset_value == "no":
-        extra_note = (
-            "We noticed this upload represents your full dataset. "
-            "If you have the time, we encourage estimating HRFs from meaningful subsets "
-            "(e.g., by demographic or condition) and sharing these estimated as well. These "
-            "HRFs estimated from subsets help improve their representaiton in science through "
-            "higher accuracy neural activity representation and improve downstream analyses."
-        )
-    elif subset_value == "yes":
-        extra_note = (
-            "Thank you for going the extra mile to estimate HRFs from a subset of your data. "
-            "These nuanced contributions deepen our shared understanding of variability and improves "
-            "representation in science of subjects estimated from through enhanced neural activity "
-            "estimation."
-        )
-    else:
-        extra_note = ""
-
-    extra_note_block = f"{extra_note}\n\n" if extra_note else ""
-
     body = (
-        f"Hello {submission_metadata.get('name', 'researcher')},\n\n"
-        "Thank you for submitting your HRF estimates to HRfunc. We truly appreciate your "
-        "contributions to the HRtree! Each HRF you share helps us understand hemodynamic "
-        "response variability and supports more accurate neural activity estimation.\n\n"
-        f"We successfully received your file '{submission_metadata.get('stored_filename')}'. "
-        "At your earliest convenience, please review the details below and let us know at "
-        "help@hrfunc.org if anything needs correction.\n\n"
-        "Submission details:\n"
-        f"  Study: {submission_metadata.get('study', 'N/A')}\n"
-        f"  Area Codes: {submission_metadata.get('area_codes', 'N/A')}\n"
-        f"  DOI: {submission_metadata.get('doi', 'N/A')}\n"
-        f"  Email: {submission_metadata.get('email', 'N/A')}\n"
-        f"  Phone Number: {submission_metadata.get('phone', 'N/A')}\n"
-        f"  Dataset Ownership: {submission_metadata.get('dataset_ownership', 'N/A')}\n"
-        f"  Dataset Permission: {submission_metadata.get('dataset_permission', 'N/A')}\n"
-        f"  Dataset Owner: {submission_metadata.get('dataset_owner', 'N/A')}\n"
-        f"  Dataset Owner Email: {submission_metadata.get('dataset_contact', 'N/A')}\n"
-        f"  Used Unaltered HRfunc: {submission_metadata.get('hrfunc_standard', 'N/A')}\n"
-        f"  Dataset Subset: {submission_metadata.get('dataset_subset', 'N/A')}\n"
-        f"  HRfunc Modifications: {submission_metadata.get('hrfunc_modifications', 'N/A') or 'N/A'}\n"
-        f"  Uploaded at (UTC): {submission_metadata.get('uploaded_at', 'N/A')}\n\n"
-        "HRF experimental context:\n"
-        f"  Task: {submission_metadata.get('task', 'N/A')}\n"
-        f"  Condition(s): {submission_metadata.get('conditions', 'N/A')}\n"
-        f"  Stimuli: {submission_metadata.get('stimuli', 'N/A')}\n"
-        f"  Stimuli Medium: {submission_metadata.get('medium', 'N/A')}\n"
-        f"  Stimuli Intensity: {submission_metadata.get('intensity', 'N/A')}\n"
-        f"  Protocol: {submission_metadata.get('protocol', 'N/A')}\n"
-        f"  Age: {submission_metadata.get('age', 'N/A')}\n"
-        f"  Demographics: {submission_metadata.get('demographics', 'N/A')}\n"
-        f"  Health Status: {submission_metadata.get('health-status', 'N/A')}\n"
-        f"  Additional Comment: {submission_metadata.get('comment', 'N/A') or 'N/A'}\n\n"
-        f"{extra_note_block}"
-        "We greatly appreciate your contribution to the HRfunc community and "
-        "cannot wait to hear about the insights you uncover!\n\n"
+        f"Hello {submission_metadata.get('name')},\n\n"
+        "Thank you for signing up to collect snowpack data for avalanche risk detection!"
+        " We greatly appreciate your interest in joining us for data collection this season."
+        " Through collecting more data we'll be able to train a high accuracy AI for predicting"
+        " avalanche risk and with your help we're on step closer to helping protect lives in the"
+        " backcountry! We are limited in the resources we have available to us to collect this" 
+        " this data and unfortunately can only accept so many people to join this season. We" 
+        " will reach out in the next few weeks with whether you have been selected to join!\n\n"
         "Best,\n"
-        "The HRfunc Team"
+        "RMDig Team"
     )
     msg.set_content(body)
 
