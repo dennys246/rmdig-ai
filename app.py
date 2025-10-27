@@ -141,7 +141,7 @@ def upload_signup():
         )
     except Exception as e:
         flash(f"Error contacting API: {e}", "error")
-        return redirect(url_for("rmdig/collection_signup"))
+        return redirect(url_for("collection_signup"))
 
     # ---- Handle response ----
     if resp.status_code == 200:
@@ -149,7 +149,7 @@ def upload_signup():
     else:
         flash(f"Signup failed: {resp.text}", "error")
 
-    return redirect(url_for("rmdig/collection_signup"))
+    return redirect(url_for("collection_signup"))
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
