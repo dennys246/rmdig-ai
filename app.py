@@ -151,7 +151,7 @@ def upload_signup():
 
     return redirect(url_for("collection_signup"))
 
-@app.route("/rmdig/receive_signup", methods=["POST"])
+@app.route("/receive_signup", methods=["POST"])
 def receive_signup():
     # Check API key
     key = request.headers.get("x-api-key")
