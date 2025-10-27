@@ -167,8 +167,8 @@ def ramblings():
 def collection_signup():
     return render_template("collection_signup.html")
 
-@app.route("/upload_json", methods=["POST"])
-def upload_json():
+@app.route("/upload_signup", methods=["POST"])
+def upload_signup():
     submission = {
         key: (value.strip() if isinstance(value, str) else value)
         for key, value in request.form.items()
@@ -232,7 +232,7 @@ def upload_json():
     # ---- Forward to API ----
     try:
         resp = requests.post(
-            "https://flask.jib-jab.org/upload_json",
+            "https://flask.jib-jab.org/upload_signup",
             files={"jsonFile": (filename, augmented_bytes)},
             headers={"x-api-key": API_KEY},
             timeout=10,
