@@ -1,5 +1,4 @@
 from flask import Flask, request, redirect, url_for, flash, render_template, jsonify
-from werkzeug.utils import secure_filename
 import os, json, requests, random, smtplib
 from email.message import EmailMessage
 from datetime import datetime, timezone
@@ -169,65 +168,17 @@ def collection_signup():
 
 @app.route("/upload_signup", methods=["POST"])
 def upload_signup():
-    submission = {
-        key: (value.strip() if isinstance(value, str) else value)
-        for key, value in request.form.items()
-    }
+    submission = {key: (value.strip() if isinstance(value, str) else value) for key, value in request.form.items()}
     uploaded_at = datetime.now(timezone.utc)
     timestamp_suffix = uploaded_at.strftime(TIMESTAMP_SUFFIX_FORMAT)
-    file = request.files.get("jsonFile")
-    has_file_upload = bool(file and file.filename)
-    submission_metadata = None
-    if has_file_upload:
-        if not file.filename.lower().endswith(".json"):
-            flash("Invalid file. Must be a .json.", "error")
-            return redirect(url_for("collection_signup"))
-
-        original_filename = secure_filename(file.filename)
-        name_root, ext = os.path.splitext(original_filename or "signup.json")
-        ext = ext or ".json"
-        if not name_root:  # in case secure_filename strips everything
-            name_root = "hrf_upload"
-            ext = ".json"
-        filename = f"{name_root}_{timestamp_suffix}_{random.randint(1, 10000)}{ext}"
-
-        # ---- Read bytes and validate JSON ----
-        original_bytes = file.read()
-        try:
-            data = json.loads(original_bytes.decode("utf-8"))
-        except json.JSONDecodeError:
-            flash("Invalid JSON content.", "error")
-            return redirect(url_for("collection_signup"))
-
-        # ---- Merge submission metadata into payload ----
-        submission.setdefault("area_codes", submission.get("area-codes", ""))
-        submission["hrfunc_modifications"] = submission.get("hrfunc_extension", "")
-        submission["comment"] = submission.get("comment", "")
-        submission_metadata = {
-            **submission,
-            "uploaded_at": uploaded_at.isoformat(),
-            "original_filename": original_filename,
-            "stored_filename": filename,
+    filename = f"collection_signup_{timestamp_suffix}_{random.randint(1, 10000)}.json"
+    payload = {
+        "_collection_signup": {
+            **{key: value for key, value in submission.items() if value},
+            "submitted_at": uploaded_at.isoformat(),
         }
-
-        if isinstance(data, dict):
-            data["_hrf_submission"] = submission_metadata
-        else:
-            data = {
-                "hrf_payload": data,
-                "_hrf_submission": submission_metadata,
-            }
-
-        augmented_bytes = json.dumps(data, separators=(",", ":")).encode("utf-8")
-    else:
-        filename = f"collection_signup_{timestamp_suffix}_{random.randint(1, 10000)}.json"
-        payload = {
-            "_collection_signup": {
-                **{key: value for key, value in submission.items() if value},
-                "submitted_at": uploaded_at.isoformat(),
-            }
-        }
-        augmented_bytes = json.dumps(payload, separators=(",", ":")).encode("utf-8")
+    }
+    augmented_bytes = json.dumps(payload, separators=(",", ":")).encode("utf-8")
 
     # ---- Forward to API ----
     try:
@@ -243,18 +194,9 @@ def upload_signup():
 
     # ---- Handle response ----
     if resp.status_code == 200:
-        if has_file_upload and submission_metadata:
-            send_confirmation_email(submission_metadata.get("email"), submission_metadata)
-            flash(
-                f"HRFs '{filename}' from the {submission.get('study', 'unknown')} study "
-                f"uploaded successfully, thank you {submission.get('name', 'researcher')}! We will reach out to you as soon as we are able to confirm upload details and confirm HRFs integration into the HRtree.",
-                "success",
-            )
-        else:
-            flash("Thanks for signing up! We'll reach out soon.", "success")
+        flash("Thanks for signing up! We'll reach out soon.", "success")
     else:
-        prefix = "Upload failed" if has_file_upload else "Signup failed"
-        flash(f"{prefix}: {resp.text}", "error")
+        flash(f"Signup failed: {resp.text}", "error")
 
     return redirect(url_for("collection_signup"))
 
