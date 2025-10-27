@@ -1,4 +1,4 @@
-# /srv/hrfunc/app/wsgi.py
+# /srv/rmdig/app/wsgi.py
 from app import app 
 
 if __name__ == "__main__":
