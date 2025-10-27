@@ -134,7 +134,7 @@ def upload_signup():
     # ---- Forward to API ----
     try:
         resp = requests.post(
-            "https://flask.jib-jab.org:5001/receive_signup",
+            "https://flask.jib-jab.org/rmdig/receive_signup",
             files={"jsonFile": (filename, augmented_bytes)},
             headers={"x-api-key": API_KEY},
             timeout=30,
@@ -151,7 +151,7 @@ def upload_signup():
 
     return redirect(url_for("collection_signup"))
 
-@app.route("/receive_signup", methods=["POST"])
+@app.route("/rmdig/receive_signup", methods=["POST"])
 def receive_signup():
     # Check API key
     key = request.headers.get("x-api-key")
