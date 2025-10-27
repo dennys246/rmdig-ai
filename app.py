@@ -134,7 +134,7 @@ def upload_signup():
     # ---- Forward to API ----
     try:
         resp = requests.post(
-            "https://flask.jib-jab.org/rmdig/receive_signup",
+            "https://flask.jib-jab.org/receive_signup",
             files={"jsonFile": (filename, augmented_bytes)},
             headers={"x-api-key": API_KEY},
             timeout=30,
@@ -173,7 +173,7 @@ def receive_signup():
     # Save file locally
     uploaded_at = datetime.now(timezone.utc)
     timestamp_suffix = uploaded_at.strftime(TIMESTAMP_SUFFIX_FORMAT)
-    stored_filename = f"/srv/public/rmdig/signups/snowpack_digger/{timestamp_suffix}_{random.randint(1,10000)}_{filename}"
+    stored_filename = f"/mnt/public/rmdig/signups/snowpack_digger/{timestamp_suffix}_{random.randint(1,10000)}_{filename}"
     with open(stored_filename, "wb") as f:
         f.write(content)
 
