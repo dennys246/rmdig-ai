@@ -45,7 +45,7 @@ def send_confirmation_email(recipient, submission_metadata):
     msg.set_content(body)
 
     try:
-        with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
+        with smtplib.SMTP(smtp_host, smtp_port, timeout=30) as server:
             if smtp_user and smtp_password:
                 server.starttls()
                 server.login(smtp_user, smtp_password)
@@ -134,10 +134,10 @@ def upload_signup():
     # ---- Forward to API ----
     try:
         resp = requests.post(
-            "https://flask.jib-jab.org/rmdig/upload_signup",
+            "https://flask.jib-jab.org:5001/receive_signup",
             files={"jsonFile": (filename, augmented_bytes)},
             headers={"x-api-key": API_KEY},
-            timeout=10,
+            timeout=30,
         )
     except Exception as e:
         flash(f"Error contacting API: {e}", "error")
@@ -150,6 +150,35 @@ def upload_signup():
         flash(f"Signup failed: {resp.text}", "error")
 
     return redirect(url_for("collection_signup"))
+
+@app.route("/receive_signup", methods=["POST"])
+def receive_signup():
+    # Check API key
+    key = request.headers.get("x-api-key")
+    if key != API_KEY:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    # Handle file
+    file = request.files.get("jsonFile")
+    if not file:
+        return jsonify({"error": "No file uploaded"}), 400
+
+    filename = file.filename
+    content = file.read()
+    try:
+        data = json.loads(content.decode("utf-8"))
+    except Exception as e:
+        return jsonify({"error": f"Invalid JSON: {e}"}), 400
+
+    # Save file locally
+    uploaded_at = datetime.now(timezone.utc)
+    timestamp_suffix = uploaded_at.strftime(TIMESTAMP_SUFFIX_FORMAT)
+    stored_filename = f"/srv/public/rmdig/signups/snowpack_digger/{timestamp_suffix}_{random.randint(1,10000)}_{filename}"
+    with open(stored_filename, "wb") as f:
+        f.write(content)
+
+    print(f"Received file: {stored_filename}")
+    return jsonify({"status": "success", "stored_filename": stored_filename}), 200
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
