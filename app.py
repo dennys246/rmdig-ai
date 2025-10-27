@@ -166,7 +166,7 @@ def ramblings():
 def collection_signup():
     return render_template("collection_signup.html")
 
-@app.route("/upload_signup", methods=["POST"])
+@app.route("/rmdig/upload_signup", methods=["POST"])
 def upload_signup():
     submission = {key: (value.strip() if isinstance(value, str) else value) for key, value in request.form.items()}
     uploaded_at = datetime.now(timezone.utc)
