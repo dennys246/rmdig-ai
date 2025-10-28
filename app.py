@@ -118,7 +118,7 @@ def ramblings():
 def collection_signup():
     return render_template("collection_signup.html")
 
-@app.route("/rmdig/upload_signup", methods=["POST"])
+@app.route("/upload_signup", methods=["POST"])
 def upload_signup():
     
     submission = {key: (value.strip() if isinstance(value, str) else value) for key, value in request.form.items()}
@@ -156,7 +156,7 @@ def upload_signup():
 
     return redirect(url_for("collection_signup"))
 
-@app.route("/rmdig/receive_signup", methods=["POST"])
+@app.route("/receive_signup", methods=["POST"])
 def receive_signup():
     # Check API key
     key = request.headers.get("x-api-key")
