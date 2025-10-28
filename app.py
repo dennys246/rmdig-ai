@@ -9,6 +9,9 @@ app.secret_key = os.environ.get("SECRET_KEY")
 
 TIMESTAMP_SUFFIX_FORMAT = "%Y-%m-%d_%H-%M-%S"
 
+API_KEY = os.environ.get("RMDIG_API_KEY")
+if not API_KEY:
+    flash("Server misconfiguration: API key missing.", "error")
 
 def send_confirmation_email(recipient, submission_metadata):
     """Send a confirmation email acknowledging receipt of the HRF submission."""
@@ -119,10 +122,6 @@ def collection_signup():
 
 @app.route("/rmdig/upload_signup", methods=["POST"])
 def upload_signup():
-    API_KEY = os.environ.get("RMDIG_API_KEY")
-    if not API_KEY:
-        flash("Server misconfiguration: API key missing.", "error")
-        return redirect(url_for("collection_signup"))
     
     submission = {key: (value.strip() if isinstance(value, str) else value) for key, value in request.form.items()}
     uploaded_at = datetime.now(timezone.utc)
