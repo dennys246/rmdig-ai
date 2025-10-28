@@ -10,8 +10,6 @@ app.secret_key = os.environ.get("SECRET_KEY")
 TIMESTAMP_SUFFIX_FORMAT = "%Y-%m-%d_%H-%M-%S"
 
 API_KEY = os.environ.get("RMDIG_API_KEY")
-if not API_KEY:
-    flash("Server misconfiguration: API key missing.", "error")
 
 def send_confirmation_email(recipient, submission_metadata):
     """Send a confirmation email acknowledging receipt of the HRF submission."""
