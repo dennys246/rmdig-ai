@@ -1,5 +1,5 @@
 from flask import Flask, request, redirect, url_for, flash, render_template, jsonify
-import os, json, requests, random, smtplib
+import os, json, random, smtplib
 from email.message import EmailMessage
 from datetime import datetime, timezone
 
@@ -53,6 +53,45 @@ def send_confirmation_email(recipient, submission_metadata):
             server.send_message(msg)
     except OSError:
         app.logger.exception("Unable to send confirmation email.")
+
+
+def send_signup_email(filename, payload, augmented_bytes):
+    """Email the signup submission details to the project team."""
+    smtp_host = os.environ.get("SMTP_HOST")
+    smtp_port = int(os.environ.get("SMTP_PORT", "587"))
+    smtp_user = os.environ.get("SMTP_USER")
+    smtp_password = os.environ.get("SMTP_PASSWORD")
+    from_email = os.environ.get("SMTP_FROM_EMAIL")
+
+    if not smtp_host or not from_email:
+        raise RuntimeError("SMTP configuration incomplete")
+
+    recipient = "dennys@rmdig.ai"
+    submission = payload.get("_collection_signup", {})
+
+    body_lines = [
+        "New collection signup received:",
+        "",
+        *(f"{key}: {value}" for key, value in submission.items()),
+    ]
+
+    msg = EmailMessage()
+    msg["Subject"] = f"Collection Signup from {submission.get('name', 'Unknown applicant')}"
+    msg["From"] = from_email
+    msg["To"] = recipient
+    msg.set_content("\n".join(body_lines))
+    msg.add_attachment(
+        augmented_bytes,
+        maintype="application",
+        subtype="json",
+        filename=filename,
+    )
+
+    with smtplib.SMTP(smtp_host, smtp_port, timeout=30) as server:
+        if smtp_user and smtp_password:
+            server.starttls()
+            server.login(smtp_user, smtp_password)
+        server.send_message(msg)
 
 @app.route("/")
 def home():
@@ -131,29 +170,24 @@ def upload_signup():
             "submitted_at": uploaded_at.isoformat(),
         }
     }
+    submission_metadata = payload["_collection_signup"]
     augmented_bytes = json.dumps(payload, separators=(",", ":")).encode("utf-8")
 
-    # ---- Forward to API ----
+    # ---- Email submission ----
     try:
-        if not API_KEY:
-            raise RuntimeError("RMDIG_API_KEY not set")
-
-        resp = requests.post(
-            "https://flask.jib-jab.org/rmdig/receive_signup",
-            files={"jsonFile": (filename, augmented_bytes)},
-            headers={"x-api-key": API_KEY},
-            timeout=30,
-        )
+        send_signup_email(filename, payload, augmented_bytes)
     except Exception as e:
-        flash(f"Error contacting API: {e}", "error")
+        app.logger.exception("Failed to send signup email.")
+        flash(f"Error sending signup email: {e}", "error")
         return redirect(url_for("collection_signup"))
 
-    # ---- Handle response ----
-    if resp.status_code == 200:
-        flash("Thanks for signing up! We'll reach out soon.", "success")
-    else:
-        flash(f"Signup failed: {resp.text}", "error")
+    recipient_email = submission_metadata.get("email")
+    try:
+        send_confirmation_email(recipient_email, submission_metadata)
+    except Exception:
+        app.logger.exception("Failed to send confirmation email.")
 
+    flash("Thanks for signing up! We'll reach out soon.", "success")
     return redirect(url_for("collection_signup"))
 
 @app.route("/receive_signup", methods=["POST"])
