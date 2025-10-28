@@ -138,8 +138,11 @@ def upload_signup():
 
     # ---- Forward to API ----
     try:
+        if not API_KEY:
+            raise RuntimeError("RMDIG_API_KEY not set")
+
         resp = requests.post(
-            "https://flask.jib-jab.org/rmdig/receive_signup",
+            "https://flask.jib-jab.org/receive_signup",
             files={"jsonFile": (filename, augmented_bytes)},
             headers={"x-api-key": API_KEY},
             timeout=30,
