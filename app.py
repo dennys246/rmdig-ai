@@ -118,7 +118,7 @@ def ramblings():
 def collection_signup():
     return render_template("collection_signup.html")
 
-@app.route("/upload_signup", methods=["POST"])
+@app.route("/rmdig/upload_signup", methods=["POST"])
 def upload_signup():
     
     submission = {key: (value.strip() if isinstance(value, str) else value) for key, value in request.form.items()}
@@ -182,7 +182,7 @@ def receive_signup():
     with open(stored_filename, "wb") as f:
         f.write(content)
 
-    print(f"Received file: {stored_filename}")
+    app.logger.info(f"Received file: {stored_filename}")
     return jsonify({"status": "success", "stored_filename": stored_filename}), 200
 
 if __name__ == "__main__":
