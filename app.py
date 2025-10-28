@@ -5,8 +5,8 @@ from datetime import datetime, timezone
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
-API_KEY = os.environ.get("RMDIG_API_KEY")
 app.secret_key = os.environ.get("SECRET_KEY")
+
 TIMESTAMP_SUFFIX_FORMAT = "%Y-%m-%d_%H-%M-%S"
 
 
@@ -119,6 +119,11 @@ def collection_signup():
 
 @app.route("/rmdig/upload_signup", methods=["POST"])
 def upload_signup():
+    API_KEY = os.environ.get("RMDIG_API_KEY")
+    if not API_KEY:
+        flash("Server misconfiguration: API key missing.", "error")
+        return redirect(url_for("collection_signup"))
+    
     submission = {key: (value.strip() if isinstance(value, str) else value) for key, value in request.form.items()}
     uploaded_at = datetime.now(timezone.utc)
     timestamp_suffix = uploaded_at.strftime(TIMESTAMP_SUFFIX_FORMAT)
@@ -134,7 +139,7 @@ def upload_signup():
     # ---- Forward to API ----
     try:
         resp = requests.post(
-            "https://flask.jib-jab.org/receive_signup",
+            "https://flask.jib-jab.org/rmdig/receive_signup",
             files={"jsonFile": (filename, augmented_bytes)},
             headers={"x-api-key": API_KEY},
             timeout=30,
