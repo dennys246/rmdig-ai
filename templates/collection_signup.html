@@ -32,16 +32,24 @@ html.dark .cta-button:hover {
 {% block title %}Sign Up | RMDig{% endblock %}
 {% block content %}
 
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <div class="alert alert-success">
-      {{ messages[0] }}
+{% with flashes = get_flashed_messages(with_categories=true) %}
+  {% if flashes %}
+    <div class="max-w-xl mx-auto mt-6 mb-2 space-y-4">
+      {% for category, message in flashes %}
+        {% set is_error = category == "error" %}
+        <div class="
+          rounded-2xl px-6 py-4 shadow-xl transition
+          {{ 'bg-rose-50 border border-rose-200 text-rose-700 dark:bg-rose-950/50 dark:text-rose-200' if is_error else 'bg-emerald-50 border border-emerald-200 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200' }}
+        ">
+          <p class="text-lg font-semibold">{{ message }}</p>
+        </div>
+      {% endfor %}
     </div>
   {% endif %}
 {% endwith %}
 <div class="max-w-6xl mx-auto mt-10 px-4 md:px-8 py-10">
   <form action="{{ url_for('upload_signup') }}" method="POST" enctype="multipart/form-data" class="theme-surface-strong max-w-xl mx-auto p-8 rounded-2xl shadow-lg space-y-6">
-    <h2 class="text-2xl font-semibold text-center text-indigo-700 dark:text-indigo-300">Join the Project!</h2>
+    <h2 class="text-2xl font-semibold text-center text-indigo-700 dark:text-indigo-300">Sign Up to be a Snowpack Digger!</h2>
     <p class="text-gray-700 dark:text-gray-200 leading-relaxed">
     Do you want to have a positive impact on your community? Join RMDig this season 
     collecting data to train an AI to predict avalanche risk. Ultimately we hope this
@@ -132,7 +140,7 @@ html.dark .cta-button:hover {
       </div>
         <div>
         <p id="experience_hopes" class="text-sm text-gray-500 dark:text-gray-400 mt-1"><br>
-          What do you hope to accomplish or learn from joining this initiative?
+          What drove you to join this initiative?
         </p>
         <input type="text" name="experience_hopes" id="experience_hopes" required
                class="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">

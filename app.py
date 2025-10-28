@@ -37,9 +37,11 @@ def send_confirmation_email(recipient, submission_metadata):
         " We greatly appreciate your interest in joining us for data collection this season."
         " Through collecting more data we'll be able to train a high accuracy AI for predicting"
         " avalanche risk and with your help we're on step closer to helping protect lives in the"
-        " backcountry! We are limited in the resources we have available to us to collect this" 
+        " backcountry!\n\nWe are limited in the resources we have available to us to collect this" 
         " this data and unfortunately can only accept so many people to join this season. We" 
-        " will reach out in the next few weeks with whether you have been selected to join!\n\n"
+        " will reach out in the next few weeks with whether you have been selected to join."
+        " Even if you aren't able to join this season for data collection we anticipate releasing"
+        " the AvAI app for anyone to collect data and analyze avalanche risk next season so stay tuned!\n\n"
         "Best,\n"
         "RMDig Team"
     )
@@ -178,7 +180,7 @@ def upload_signup():
         send_signup_email(filename, payload, augmented_bytes)
     except Exception as e:
         app.logger.exception("Failed to send signup email.")
-        flash(f"Error sending signup email: {e}", "error")
+        flash("⚠️ We hit a snag sending your signup. Please try again shortly.", "error")
         return redirect(url_for("collection_signup"))
 
     recipient_email = submission_metadata.get("email")
@@ -187,7 +189,7 @@ def upload_signup():
     except Exception:
         app.logger.exception("Failed to send confirmation email.")
 
-    flash("Thanks for signing up! We'll reach out soon.", "success")
+    flash("🎉 Thanks for signing up! We'll be in touch soon.", "success")
     return redirect(url_for("collection_signup"))
 
 @app.route("/receive_signup", methods=["POST"])
