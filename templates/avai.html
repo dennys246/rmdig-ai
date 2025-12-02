@@ -2,28 +2,67 @@
 
 {% block main_class %}avai | RMDig {% endblock %}
 
+{% block extra_head %}
+<style>
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="relative w-full min-h-[calc(100vh-128px)] bg-cover bg-center bg-no-repeat" style="background-image: url('/static/img/loveland_ridgeline.JPG');">
-
-  <!-- Logo in the top half over the background image -->
-  <div class="absolute top-0 left-0 w-full h-1/2 flex items-center justify-center pointer-events-none">
-    <img src="/static/img/AvAi-Logo-White.png" alt="AvAI logo" class="w-52 max-w-[80%] drop-shadow">
-  </div>
-
-  <!-- Bottom bar overlay -->
-  <div class="absolute bottom-0 left-0 w-full bg-black/60 bg-gray-900/70 backdrop-blur-sm px-6 py-20">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold mb-4 text-white text-center">
-        AvAI Avalanche Risk Predictor
-      </h2>
-      <p class="text-md text-gray-200 text-gray-300 leading-relaxed text-center">
-        <strong class="text-indigo-400">AvAI</strong> is an exploratory model embedding the outputs of the pre-trained 
-        <a href="/snowgan" class="text-indigo-400 hover:text-indigo-600">snowGAN</a> and 
-        <a href="/corediff" class="text-indigo-400 hover:text-indigo-600">coreDiff</a> models with weather timeseries data to analyze mini-cored data to predict the day's avalanche risk within the region
-        using a multi-modal transformer architecture. The tool is still undergoing training and is expected to be released alongside a paper detailing the project once we are able to break past the current accuracy
-        of avalanche risk prediction models of 86%, aspiring too 99% accuracy given the dangerous outcomes of inaccurate predictions.
-      </p>
+<div class="w-full">
+  <!-- Hero with centered content card -->
+  <section class="relative w-full min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center px-4" style="background-image: url('/static/img/loveland_ridgeline.JPG');">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/50"></div>
+    <div class="relative z-10 w-full max-w-5xl">
+      <div class="bg-black/70 bg-gray-900/70 backdrop-blur-sm px-6 md:px-10 py-14 rounded-2xl shadow-lg reveal">
+        <div class="flex flex-col items-center gap-6">
+          <img src="/static/img/AvAi-Logo-White.png" alt="AvAI logo" class="w-52 max-w-full drop-shadow">
+          <h2 class="text-3xl font-bold text-white text-center">
+            AvAI Avalanche Risk Predictor
+          </h2>
+          <p class="text-md text-gray-200 text-gray-300 leading-relaxed text-center">
+            <strong class="text-indigo-400">AvAI</strong> is an exploratory model embedding the outputs of the pre-trained 
+            <a href="/snowgan" class="text-indigo-400 hover:text-indigo-600">snowGAN</a> and 
+            <a href="/corediff" class="text-indigo-400 hover:text-indigo-600">coreDiff</a> models with weather timeseries data to analyze mini-cored data to predict the day's avalanche risk within the region
+            using a multi-modal transformer architecture. The tool is still undergoing training and is expected to be released alongside a paper detailing the project once we are able to break past the current accuracy
+            of avalanche risk prediction models of 86%, aspiring too 99% accuracy given the dangerous outcomes of inaccurate predictions.
+          </p>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const revealEls = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      revealEls.forEach(el => el.classList.add('visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.25 });
+
+    revealEls.forEach(el => observer.observe(el));
+  });
+</script>
 {% endblock %}
