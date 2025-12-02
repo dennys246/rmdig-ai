@@ -79,17 +79,20 @@
 
   <!-- Header -->
 <header class="p-4 bg-black text-white shadow">
-  <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center">
-    <a href="/" class="logo-wrapper mb-4 md:mb-0">
-      <img src="/static/img/RMDig-Logo.png" alt="RMDig Logo" class="logo-default" />
-      <img src="/static/img/RMDig-Logo-White.png" alt="RMDig Hover Logo" class="logo-hover" />
-    </a>
-    <nav class="flex flex-col md:flex-row md:space-x-4 text-xl space-y-2 md:space-y-0">
-      <a href="/mission" class="chalk-text text-white hover:text-indigo-400">Mission</a>
-      <a href="/guides" class="chalk-text text-white hover:text-indigo-400">Guides</a>
-      <a href="/snowpack_dataset" class="chalk-text text-white hover:text-indigo-400">Data</a>
-      <a href="/models" class="chalk-text text-white hover:text-indigo-400">Models</a>
-      <a href="/collection_signup" class="chalk-text text-white hover:text-indigo-400">Sign Up</a>
+  <div class="max-w-7xl mx-auto w-full flex flex-col items-center gap-4 md:grid md:grid-cols-3 md:items-center">
+    <div class="hidden md:block"></div>
+    <div class="flex justify-center">
+      <a href="/" class="logo-wrapper">
+        <img src="/static/img/RMDig-Logo.png" alt="RMDig Logo" class="logo-default items-center" />
+        <img src="/static/img/RMDig-Logo-White.png" alt="RMDig Hover Logo" class="logo-hover items-center" />
+      </a>
+    </div>
+    <nav class="flex flex-wrap justify-center text-center gap-3 md:flex-nowrap md:justify-end md:space-x-4 md:gap-0 text-xl">
+      <a href="/mission" class="text-white hover:text-indigo-400">Mission</a>
+      <a href="/guides" class="text-white hover:text-indigo-400">Guides</a>
+      <a href="/snowpack_dataset" class="text-white hover:text-indigo-400">Data</a>
+      <a href="/models" class="text-white hover:text-indigo-400">Models</a>
+      <a href="/collection_signup" class="text-white hover:text-indigo-400">Sign Up</a>
     </nav>
   </div>
 </header>
