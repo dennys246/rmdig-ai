@@ -2,14 +2,45 @@ from flask import Flask, request, redirect, url_for, flash, render_template, jso
 import os, json, random, smtplib
 from email.message import EmailMessage
 from datetime import datetime, timezone
+from pathlib import Path
+from typing import List, Dict
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
 app.secret_key = os.environ.get("SECRET_KEY")
 
 TIMESTAMP_SUFFIX_FORMAT = "%Y-%m-%d_%H-%M-%S"
+SITE_BASE_URL = os.environ.get("SITE_BASE_URL")
 
 API_KEY = os.environ.get("RMDIG_API_KEY")
+
+
+@app.context_processor
+def inject_seo_defaults():
+    """Expose SEO-friendly defaults for templates without altering visible content."""
+    base_url = SITE_BASE_URL or request.url_root.rstrip("/")
+    canonical_url = f"{base_url}{request.path}"
+    default_description = (
+        "Rocky Mountain Digerati builds AI models for avalanche risk prediction, "
+        "snowpack data collection, and mountain safety research."
+    )
+    keywords = [
+        "avalanche risk prediction",
+        "AI avalanche forecasting",
+        "snowpack data",
+        "avalanche datasets",
+        "avalanche safety research",
+        "mountain machine learning",
+        "computer vision snow analysis",
+        "AvAI",
+        "RMDig",
+    ]
+    return {
+        "canonical_url": canonical_url,
+        "default_description": default_description,
+        "default_keywords": ", ".join(keywords),
+        "site_base_url": base_url,
+    }
 
 def send_confirmation_email(recipient, submission_metadata):
     """Send a confirmation email acknowledging receipt of the HRF submission."""
@@ -220,6 +251,82 @@ def receive_signup():
 
     app.logger.info(f"Received file: {stored_filename}")
     return jsonify({"status": "success", "stored_filename": stored_filename}), 200
+
+
+def _get_page_last_modified(path: Path) -> str:
+    """Return ISO8601 date for last modified timestamp of a template/static file."""
+    try:
+        mtime = path.stat().st_mtime
+        return datetime.fromtimestamp(mtime, tz=timezone.utc).date().isoformat()
+    except FileNotFoundError:
+        return datetime.now(timezone.utc).date().isoformat()
+
+
+def _sitemap_entries() -> List[Dict[str, str]]:
+    """Define crawlable routes for the sitemap with metadata."""
+    template_dir = Path(__file__).parent / "templates"
+    url_specs = [
+        ("/", "index.html", "1.0", "daily"),
+        ("/mission", "mission.html", "0.9", "weekly"),
+        ("/avai", "avai.html", "0.9", "weekly"),
+        ("/models", "models.html", "0.8", "monthly"),
+        ("/guides", "guides.html", "0.7", "weekly"),
+        ("/snowpack_dataset", "snowpack_dataset.html", "0.9", "weekly"),
+        ("/datasets", "datasets.html", "0.7", "monthly"),
+        ("/snowgan", "snowgan.html", "0.7", "monthly"),
+        ("/gan_finetuning", "gan_finetuning.html", "0.6", "monthly"),
+        ("/corediff", "corediff.html", "0.6", "monthly"),
+        ("/diffusion_finetuning", "diffusion_finetuning.html", "0.6", "monthly"),
+        ("/events", "events.html", "0.5", "monthly"),
+        ("/ramblings", "ramblings.html", "0.5", "monthly"),
+        ("/collection_signup", "collection_signup.html", "0.6", "weekly"),
+        ("/contact", "contact.html", "0.4", "yearly"),
+        ("/about", "about.html", "0.4", "yearly"),
+    ]
+
+    entries = []
+    for path, template, priority, freq in url_specs:
+        lastmod = _get_page_last_modified(template_dir / template)
+        entries.append(
+            {
+                "loc": path,
+                "lastmod": lastmod,
+                "changefreq": freq,
+                "priority": priority,
+            }
+        )
+    return entries
+
+
+@app.route("/sitemap.xml", methods=["GET"])
+def sitemap():
+    base_url = request.url_root.rstrip("/")
+    urls = _sitemap_entries()
+    xml_parts = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    for url in urls:
+        xml_parts.append("  <url>")
+        xml_parts.append(f"    <loc>{base_url}{url['loc']}</loc>")
+        xml_parts.append(f"    <lastmod>{url['lastmod']}</lastmod>")
+        xml_parts.append(f"    <changefreq>{url['changefreq']}</changefreq>")
+        xml_parts.append(f"    <priority>{url['priority']}</priority>")
+        xml_parts.append("  </url>")
+    xml_parts.append("</urlset>")
+    xml_response = "\n".join(xml_parts)
+    return app.response_class(xml_response, mimetype="application/xml")
+
+
+@app.route("/robots.txt", methods=["GET"])
+def robots_txt():
+    base_url = request.url_root.rstrip("/")
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        f"Sitemap: {base_url}/sitemap.xml",
+    ]
+    return app.response_class("\n".join(lines), mimetype="text/plain")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
