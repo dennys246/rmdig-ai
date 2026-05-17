@@ -7,18 +7,18 @@
 `rmdig-portal` is the user-facing Next.js application served at `app.rmdig.ai`. It is one of four services in the rmdig platform:
 
 - **rmdig-portal** (this repo) — user accounts, SAR org management, dashboards, eventually capture review and payouts
-- **AvServ** (`github.com/dennyschaedig/AvServ`) — Go safety watchdog, alert dispatch, check-ins
+- **AvServ** (`github.com/dennys246/AvServ`) — Go safety watchdog, alert dispatch, check-ins
 - **SnowDB** (does not exist yet) — capture storage, novelty scoring, review queue backend, DataLedger source of truth
 - **AvAI / snowGAN** — offline ML training pipelines, publish models to HuggingFace Hub
 
 **Authoritative planning docs live in the `rmdig-ai` repo** at `docs/plans/`:
-- [00 Platform architecture](https://github.com/dennyschaedig/rmdig-ai/blob/main/docs/plans/00_platform_architecture.md)
-- [01 Accounts and orgs](https://github.com/dennyschaedig/rmdig-ai/blob/main/docs/plans/01_accounts_and_orgs.md)
-- [02 Data contribution](https://github.com/dennyschaedig/rmdig-ai/blob/main/docs/plans/02_data_contribution.md)
-- [03 SAR workflow](https://github.com/dennyschaedig/rmdig-ai/blob/main/docs/plans/03_sar_workflow.md)
-- [04 Payments and legal](https://github.com/dennyschaedig/rmdig-ai/blob/main/docs/plans/04_payments_and_legal.md)
-- [05 Ledgers](https://github.com/dennyschaedig/rmdig-ai/blob/main/docs/plans/05_ledgers.md)
-- [06 Phase 1 migration](https://github.com/dennyschaedig/rmdig-ai/blob/main/docs/plans/06_phase1_migration.md) ← **read this first**
+- [00 Platform architecture](https://github.com/dennys246/rmdig-ai/blob/main/docs/plans/00_platform_architecture.md)
+- [01 Accounts and orgs](https://github.com/dennys246/rmdig-ai/blob/main/docs/plans/01_accounts_and_orgs.md)
+- [02 Data contribution](https://github.com/dennys246/rmdig-ai/blob/main/docs/plans/02_data_contribution.md)
+- [03 SAR workflow](https://github.com/dennys246/rmdig-ai/blob/main/docs/plans/03_sar_workflow.md)
+- [04 Payments and legal](https://github.com/dennys246/rmdig-ai/blob/main/docs/plans/04_payments_and_legal.md)
+- [05 Ledgers](https://github.com/dennys246/rmdig-ai/blob/main/docs/plans/05_ledgers.md)
+- [06 Phase 1 migration](https://github.com/dennys246/rmdig-ai/blob/main/docs/plans/06_phase1_migration.md) ← **read this first**
 
 This bootstrap is the operational complement to doc 06.
 
@@ -129,7 +129,7 @@ After this, configure Vercel to point at the repo, add env vars, and the first d
 
 ## 4 — Phase 1 milestones with acceptance criteria
 
-Follow [06_phase1_migration.md](https://github.com/dennyschaedig/rmdig-ai/blob/main/docs/plans/06_phase1_migration.md) for the detailed plan. Acceptance criteria for each milestone:
+Follow [06_phase1_migration.md](https://github.com/dennys246/rmdig-ai/blob/main/docs/plans/06_phase1_migration.md) for the detailed plan. Acceptance criteria for each milestone:
 
 ### P1.0 — Skeleton up
 - [ ] Repo created, Vercel deploy live at a Vercel-generated URL
