@@ -1,5 +1,8 @@
 from flask import Flask, request, redirect, url_for, flash, render_template, jsonify
-import os, json, random, smtplib
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from werkzeug.utils import secure_filename
+import os, json, random, smtplib, re, uuid, hmac
 import requests
 from email.message import EmailMessage
 from datetime import datetime, timezone
@@ -16,6 +19,22 @@ SITE_BASE_URL = os.environ.get("SITE_BASE_URL")
 API_KEY = os.environ.get("RMDIG_API_KEY")
 TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
 SPAM_PROTECTED_FIELDS = {"website", "cf-turnstile-response"}
+EMAIL_FORMAT_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+SIGNUP_STORAGE_DIR = "/mnt/public/rmdig/signups/snowpack_digger/"
+
+
+def _client_ip():
+    forwarded = request.headers.get("X-Forwarded-For", "")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return get_remote_address()
+
+
+limiter = Limiter(
+    key_func=_client_ip,
+    app=app,
+    storage_uri="memory://",
+)
 
 
 def verify_turnstile(token, remote_ip=None):
@@ -72,6 +91,9 @@ def inject_seo_defaults():
 def send_confirmation_email(recipient, submission_metadata):
     """Send a confirmation email acknowledging receipt of the HRF submission."""
     if not recipient:
+        return
+    if not EMAIL_FORMAT_RE.match(recipient):
+        app.logger.info("Skipping confirmation email: recipient failed format validation.")
         return
 
     smtp_host = os.environ.get("SMTP_HOST")
@@ -218,6 +240,7 @@ def collection_signup():
     return render_template("collection_signup.html")
 
 @app.route("/rmdig/upload_signup", methods=["POST"])
+@limiter.limit("5 per hour")
 def upload_signup():
     # Honeypot: real users never see the `website` field. Bots fill everything.
     # Silently flash success so the bot doesn't learn to bypass.
@@ -268,32 +291,35 @@ def upload_signup():
     return redirect(url_for("collection_signup"))
 
 @app.route("/receive_signup", methods=["POST"])
+@limiter.limit("100 per minute")
 def receive_signup():
-    # Check API key
-    key = request.headers.get("x-api-key")
-    if key != API_KEY:
+    if API_KEY is None:
+        app.logger.error("/receive_signup invoked but RMDIG_API_KEY is not set")
+        return jsonify({"error": "Server misconfigured"}), 503
+
+    key = request.headers.get("x-api-key", "")
+    if not hmac.compare_digest(key, API_KEY):
         return jsonify({"error": "Unauthorized"}), 401
 
-    # Handle file
     file = request.files.get("jsonFile")
     if not file:
         return jsonify({"error": "No file uploaded"}), 400
 
-    filename = file.filename
+    client_filename = secure_filename(file.filename or "upload.json")
     content = file.read()
     try:
-        data = json.loads(content.decode("utf-8"))
+        json.loads(content.decode("utf-8"))
     except Exception as e:
         return jsonify({"error": f"Invalid JSON: {e}"}), 400
 
-    # Save file locally
     uploaded_at = datetime.now(timezone.utc)
     timestamp_suffix = uploaded_at.strftime(TIMESTAMP_SUFFIX_FORMAT)
-    stored_filename = f"/mnt/public/rmdig/signups/snowpack_digger/{timestamp_suffix}_{random.randint(1,10000)}_{filename}"
+    stored_basename = f"{timestamp_suffix}_{uuid.uuid4().hex}.json"
+    stored_filename = os.path.join(SIGNUP_STORAGE_DIR, stored_basename)
     with open(stored_filename, "wb") as f:
         f.write(content)
 
-    app.logger.info(f"Received file: {stored_filename}")
+    app.logger.info(f"Received file (client_name={client_filename}): {stored_filename}")
     return jsonify({"status": "success", "stored_filename": stored_filename}), 200
 
 
