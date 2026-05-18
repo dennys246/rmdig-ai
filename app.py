@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect, url_for, flash, render_template, jsonify
 import os, json, random, smtplib
+import requests
 from email.message import EmailMessage
 from datetime import datetime, timezone
 from pathlib import Path
@@ -13,6 +14,31 @@ TIMESTAMP_SUFFIX_FORMAT = "%Y-%m-%d_%H-%M-%S"
 SITE_BASE_URL = os.environ.get("SITE_BASE_URL")
 
 API_KEY = os.environ.get("RMDIG_API_KEY")
+TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
+SPAM_PROTECTED_FIELDS = {"website", "cf-turnstile-response"}
+
+
+def verify_turnstile(token, remote_ip=None):
+    """Verify a Cloudflare Turnstile token. Returns True if verified, or if not configured.
+
+    Fails open on network errors (honeypot is the cheap layer; Turnstile is defense in depth).
+    Fails closed on a missing token when a secret is configured.
+    """
+    secret = os.environ.get("TURNSTILE_SECRET_KEY")
+    if not secret:
+        return True
+    if not token:
+        return False
+    try:
+        payload = {"secret": secret, "response": token}
+        if remote_ip:
+            payload["remoteip"] = remote_ip
+        resp = requests.post(TURNSTILE_VERIFY_URL, data=payload, timeout=5)
+        resp.raise_for_status()
+        return bool(resp.json().get("success"))
+    except Exception:
+        app.logger.exception("Turnstile verification network error; allowing submission.")
+        return True
 
 
 @app.context_processor
@@ -40,6 +66,7 @@ def inject_seo_defaults():
         "default_description": default_description,
         "default_keywords": ", ".join(keywords),
         "site_base_url": base_url,
+        "turnstile_site_key": os.environ.get("TURNSTILE_SITE_KEY"),
     }
 
 def send_confirmation_email(recipient, submission_metadata):
@@ -192,8 +219,25 @@ def collection_signup():
 
 @app.route("/rmdig/upload_signup", methods=["POST"])
 def upload_signup():
-    
-    submission = {key: (value.strip() if isinstance(value, str) else value) for key, value in request.form.items()}
+    # Honeypot: real users never see the `website` field. Bots fill everything.
+    # Silently flash success so the bot doesn't learn to bypass.
+    if request.form.get("website", "").strip():
+        app.logger.info("Signup blocked by honeypot.")
+        flash("🎉 Thanks for signing up! We'll be in touch soon.", "success")
+        return redirect(url_for("collection_signup"))
+
+    if not verify_turnstile(
+        request.form.get("cf-turnstile-response", ""),
+        remote_ip=request.headers.get("CF-Connecting-IP") or request.remote_addr,
+    ):
+        flash("⚠️ Couldn't verify the captcha challenge. Please try again.", "error")
+        return redirect(url_for("collection_signup"))
+
+    submission = {
+        key: (value.strip() if isinstance(value, str) else value)
+        for key, value in request.form.items()
+        if key not in SPAM_PROTECTED_FIELDS
+    }
     uploaded_at = datetime.now(timezone.utc)
     timestamp_suffix = uploaded_at.strftime(TIMESTAMP_SUFFIX_FORMAT)
     filename = f"collection_signup_{timestamp_suffix}_{random.randint(1, 10000)}.json"
