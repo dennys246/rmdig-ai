@@ -203,6 +203,14 @@ def guides():
 def avai():
     return render_template("avai.html")
 
+@app.route("/avai/terms")
+def avai_terms():
+    return render_template("avai_terms.html")
+
+@app.route("/avai/privacy")
+def avai_privacy():
+    return render_template("avai_privacy.html")
+
 @app.route("/snowgan")
 def snowgan():
     return render_template("snowgan.html")
@@ -339,6 +347,8 @@ def _sitemap_entries() -> List[Dict[str, str]]:
         ("/", "index.html", "1.0", "daily"),
         ("/mission", "mission.html", "0.9", "weekly"),
         ("/avai", "avai.html", "0.9", "weekly"),
+        ("/avai/terms", "avai_terms.html", "0.4", "yearly"),
+        ("/avai/privacy", "avai_privacy.html", "0.4", "yearly"),
         ("/models", "models.html", "0.8", "monthly"),
         ("/guides", "guides.html", "0.7", "weekly"),
         ("/snowpack_dataset", "snowpack_dataset.html", "0.9", "weekly"),

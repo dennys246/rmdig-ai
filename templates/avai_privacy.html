@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}AvAI Privacy Policy | Rocky Mountain Digerati{% endblock %}
+{% block meta_description %}Privacy policy for AvAI, the backcountry safety companion service operated by Rocky Mountain Digerati, LLC, including how SMS data is handled.{% endblock %}
+{% block og_title %}AvAI Privacy Policy{% endblock %}
+{% block twitter_title %}AvAI Privacy Policy{% endblock %}
+
+{% block content %}
+<article class="text-gray-200 leading-relaxed space-y-6">
+
+  <header class="space-y-1">
+    <h1 class="text-3xl font-bold text-white">AvAI Privacy Policy</h1>
+    <p class="text-sm text-gray-400">Operated by Rocky Mountain Digerati, LLC &middot; Last updated June 28, 2026 &middot; Effective June 28, 2026</p>
+  </header>
+
+  <p class="text-lg">
+    This Privacy Policy explains how Rocky Mountain Digerati, LLC ("RMDig", "we", "us", "our") collects, uses,
+    and shares information in connection with AvAI, a backcountry safety companion service consisting of the
+    AvAI mobile app and its backend servers. It applies to AvAI users ("Account Holders") and to the people
+    they designate to receive safety alerts ("Check-In Partners"). For how our SMS program works, see our
+    <a href="/avai/terms" class="text-indigo-400 hover:text-indigo-300 underline">Messaging Terms &amp; Conditions</a>.
+  </p>
+
+  <section class="space-y-3">
+    <h2 class="text-xl font-semibold text-white">1. Information we collect</h2>
+    <ul class="list-disc pl-6 space-y-2">
+      <li><strong class="text-white">Account and device data.</strong> A device identifier and account linkage
+        used to authenticate the app to our servers. We do not require a name or email to create an account.</li>
+      <li><strong class="text-white">Check-In Partner contact details.</strong> The name and mobile phone
+        number (and, optionally, email) of the people an Account Holder designates as Check-In Partners. This
+        information is provided by the Account Holder.</li>
+      <li><strong class="text-white">Outing and check-in data.</strong> When you check out for an outing: your
+        planned return time, an optional free-text note, and, if you enable location sharing, your last known
+        coordinates.</li>
+      <li><strong class="text-white">Message metadata.</strong> Records of the safety messages we send and
+        their delivery status as reported by our messaging provider.</li>
+      <li><strong class="text-white">Technical and diagnostic data.</strong> Limited app and server logs, and
+        crash reports if enabled. Crash reports are scrubbed of personal details before they leave the device.</li>
+    </ul>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-xl font-semibold text-white">2. How we use information</h2>
+    <ul class="list-disc pl-6 space-y-2">
+      <li>To deliver the core safety function: alerting a Check-In Partner by SMS (and, where available, email)
+        when an Account Holder is overdue or triggers "Send Help".</li>
+      <li>To include, in an alert, the Account Holder's last known location and a relevant search-and-rescue
+        contact number when one is known, so a Check-In Partner can act.</li>
+      <li>To confirm a Check-In Partner's consent and availability.</li>
+      <li>To operate, secure, debug, and improve the service.</li>
+      <li>To comply with legal obligations.</li>
+    </ul>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-xl font-semibold text-white">3. SMS / text-messaging consent</h2>
+    <div class="border-l-4 border-indigo-500 bg-indigo-500/10 rounded p-4">
+      <strong class="text-white">No mobile information will be shared with third parties or affiliates for
+      marketing or promotional purposes.</strong> Text-messaging originator opt-in data and consent are not
+      shared with any third parties. Information may be shared only with the service providers that are strictly
+      necessary to deliver AvAI's safety messages, as described in Section 4. We do not sell your personal
+      information.
+    </div>
+    <p>Check-In Partners opt in to SMS by replying <span class="font-mono font-semibold text-white">YES</span>
+      to an AvAI request, and may opt out at any time by replying
+      <span class="font-mono font-semibold text-white">STOP</span>. Message and data rates may apply. See the
+      <a href="/avai/terms" class="text-indigo-400 hover:text-indigo-300 underline">Messaging Terms &amp; Conditions</a>
+      for details.</p>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-xl font-semibold text-white">4. How we share information</h2>
+    <p>We share information only as needed to run AvAI:</p>
+    <ul class="list-disc pl-6 space-y-2">
+      <li><strong class="text-white">Messaging and communications providers.</strong> We use Twilio to send SMS
+        and an email provider to send email. To deliver an alert, we share the recipient's phone number (or
+        email) and the message content, which may include the Account Holder's first name, last known
+        coordinates, and a search-and-rescue contact number.</li>
+      <li><strong class="text-white">Recipients of alerts.</strong> By design, a Check-In Partner receives the
+        safety information described above so they can help.</li>
+      <li><strong class="text-white">Emergency context.</strong> AvAI does not contact emergency services for
+        you. Our messages may direct a Check-In Partner to call 911 or a local search-and-rescue team.</li>
+      <li><strong class="text-white">Legal and safety.</strong> We may disclose information if required by law
+        or to protect the rights, safety, or property of any person.</li>
+      <li><strong class="text-white">No sale.</strong> We do not sell personal information, and we do not share
+        it for third-party marketing.</li>
+    </ul>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-xl font-semibold text-white">5. Location data</h2>
+    <p>Location sharing is optional and controlled by the Account Holder's device permissions. When enabled, a
+      last known location is collected so it can be included in a safety alert. You can disable location sharing
+      in your device settings at any time.</p>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-xl font-semibold text-white">6. Data retention</h2>
+    <p>We retain outing, contact, and message records for as long as needed to provide the service and to meet
+      legal, security, and operational requirements, then delete or de-identify them. You may request deletion
+      of your data as described below.</p>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-xl font-semibold text-white">7. Security</h2>
+    <p>We use technical and organizational measures to protect information, including encrypted transport and
+      access controls. No system is perfectly secure, and we cannot guarantee absolute security.</p>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-xl font-semibold text-white">8. Your choices and rights</h2>
+    <ul class="list-disc pl-6 space-y-2">
+      <li><strong class="text-white">Opt out of SMS:</strong> reply
+        <span class="font-mono font-semibold text-white">STOP</span> to any AvAI message.</li>
+      <li><strong class="text-white">Get help:</strong> reply
+        <span class="font-mono font-semibold text-white">HELP</span> or email
+        <a href="mailto:ops@rmdig.ai" class="text-indigo-400 hover:text-indigo-300 underline">ops@rmdig.ai</a>.</li>
+      <li><strong class="text-white">Access or deletion:</strong> email
+        <a href="mailto:ops@rmdig.ai" class="text-indigo-400 hover:text-indigo-300 underline">ops@rmdig.ai</a>
+        to request access to, correction of, or deletion of your information, subject to applicable law.</li>
+      <li><strong class="text-white">Check-In Partners:</strong> if someone listed you without your consent,
+        reply <span class="font-mono font-semibold text-white">STOP</span> or contact us to be removed.</li>
+    </ul>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-xl font-semibold text-white">9. Children</h2>
+    <p>AvAI is not directed to children under 13, and we do not knowingly collect personal information from
+      them. If you believe a child has provided information, contact us and we will delete it.</p>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-xl font-semibold text-white">10. Beta service</h2>
+    <p>AvAI is currently offered as a beta service. It may be unavailable or unreliable, and should be used as
+      one layer of a broader safety practice, not as your only safety system.</p>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-xl font-semibold text-white">11. Changes to this policy</h2>
+    <p>We may update this Privacy Policy from time to time. Material changes will be reflected by the
+      "Last updated" date above.</p>
+  </section>
+
+  <section class="space-y-3">
+    <h2 class="text-xl font-semibold text-white">12. Contact</h2>
+    <p>Rocky Mountain Digerati, LLC &mdash; AvAI<br>
+      Email: <a href="mailto:ops@rmdig.ai" class="text-indigo-400 hover:text-indigo-300 underline">ops@rmdig.ai</a></p>
+  </section>
+
+  <p class="text-sm text-gray-400 pt-4 border-t border-gray-700">
+    See also our <a href="/avai/terms" class="text-indigo-400 hover:text-indigo-300 underline">Messaging Terms &amp; Conditions</a>.
+  </p>
+
+</article>
+{% endblock %}
