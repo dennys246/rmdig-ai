@@ -24,6 +24,8 @@ Recommended reading order for a first pass:
 | 05 | [Ledgers](05_ledgers.md) | `DataLedger` and `RescueLedger` schemas, period close, audit surface |
 | 06 | [Phase 1 migration](06_phase1_migration.md) | Concrete build plan: Flask → Next.js portal with auth, device linking, SAR onboarding |
 | 07 | [Portal bootstrap](07_portal_bootstrap.md) | Day-one execution brief for the new `rmdig-portal` repo — to be moved there as `CLAUDE_BOOTSTRAP.md` |
+| 08 | [Terminology reframe](08_terminology_reframe.md) | Pointer to AvServ's canonical "check out / check in" reframe; the rmdig-side scope |
+| 09 | [Test personas](09_test_personas.md) | Cross-service E2E test identities (member / staff / invitee) and how each repo seeds them |
 
 ## Key decisions captured here
 
